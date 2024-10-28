@@ -111,7 +111,7 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 			}
 		}
 
-		public static function get_pricing( $product_id ) {
+		public static function get_pricing( $product_id, $context = 'display' ) {
 			$product   = wc_get_product( $product_id );
 			$pricing   = [];
 			$prices    = [];
@@ -241,7 +241,7 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 				], $pricing );
 			}
 
-			return apply_filters( 'wpcpq_get_pricing', $pricing, $product_id );
+			return apply_filters( 'wpcpq_get_pricing', $pricing, $product_id, $context );
 		}
 
 		public static function format_prices( $prices ) {
@@ -328,6 +328,10 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 		public static function get_price( $method, $tiers, $quantity, $old_price ) {
 			$quantity = (float) $quantity;
 			$step     = 1;
+
+			if ( empty( $tiers ) || ! is_array( $tiers ) ) {
+				return $old_price;
+			}
 
 			if ( $method === 'tiered' ) {
 				$total = 0;

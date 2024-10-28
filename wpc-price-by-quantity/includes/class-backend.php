@@ -51,6 +51,12 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 
 			// Overview
 			add_action( 'wp_ajax_wpcpq_overview', [ $this, 'ajax_overview' ] );
+
+			// Export
+			add_filter( 'woocommerce_product_export_meta_value', [ $this, 'export_process' ], 10, 3 );
+
+			// Import
+			add_filter( 'woocommerce_product_import_pre_insert_product_object', [ $this, 'import_process' ], 10, 2 );
 		}
 
 		public function product_data_tabs( $tabs ) {
@@ -735,6 +741,31 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 			}
 
 			wp_die();
+		}
+
+		function export_process( $value, $meta, $product ) {
+			if ( $meta->key === 'wpcpq_prices' ) {
+				$ids = get_post_meta( $product->get_id(), 'wpcpq_prices', true );
+
+				if ( ! empty( $ids ) && is_array( $ids ) ) {
+					return json_encode( $ids );
+				}
+			}
+
+			return $value;
+		}
+
+		function import_process( $object, $data ) {
+			if ( isset( $data['meta_data'] ) ) {
+				foreach ( $data['meta_data'] as $meta ) {
+					if ( $meta['key'] === 'wpcpq_prices' ) {
+						$object->update_meta_data( 'wpcpq_prices', json_decode( $meta['value'], true ) );
+						break;
+					}
+				}
+			}
+
+			return $object;
 		}
 	}
 

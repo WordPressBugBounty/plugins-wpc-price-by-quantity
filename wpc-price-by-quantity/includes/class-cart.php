@@ -38,7 +38,7 @@ if ( ! class_exists( 'Wpcpq_Cart' ) ) {
 							$ori_product = apply_filters( 'wpcpq_get_ori_product', wc_get_product( $product_id ), $cart_item, $cart_item_key );
 							$ori_price   = apply_filters( 'wpcpq_get_ori_product_price', $ori_product->get_price(), $cart_item, $cart_item_key );
 							$quantity    = apply_filters( 'wpcpq_cart_item_quantity', $cart_item['quantity'], $cart_item, $cart_item_key );
-							$pricing     = Wpcpq_Helper()::get_pricing( $product_id );
+							$pricing     = Wpcpq_Helper()::get_pricing( $product_id, 'cart' );
 							$new_price   = Wpcpq_Helper()::get_price( $pricing['method'], $pricing['tiers'], $quantity, $ori_price );
 							$new_price   = round( $new_price, wc_get_price_decimals() );
 
@@ -78,7 +78,7 @@ if ( ! class_exists( 'Wpcpq_Cart' ) ) {
 			$product    = $item->get_product();
 			$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
 			$quantity   = $item->get_quantity();
-			$pricing    = Wpcpq_Helper()::get_pricing( $product_id );
+			$pricing    = Wpcpq_Helper()::get_pricing( $product_id, 'order' );
 			$new_price  = Wpcpq_Helper()::get_price( $pricing['method'], $pricing['tiers'], $quantity, $product->get_price() );
 
 			$product->set_price( $new_price );

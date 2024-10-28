@@ -3,19 +3,19 @@
 Plugin Name: WPC Price by Quantity for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: Offering quantity-based prices would be one of the most effective and powerful methods to urge buyers with very few convincing actions needed.
-Version: 5.1.5
+Version: 5.1.6
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: wpc-price-by-quantity
 Domain Path: /languages/
 Requires Plugins: woocommerce
 Requires at least: 4.0
-Tested up to: 6.6
+Tested up to: 6.7
 WC requires at least: 3.0
 WC tested up to: 9.3
 */
 
-! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.1.5' );
+! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.1.6' );
 ! defined( 'WPCPQ_LITE' ) && define( 'WPCPQ_LITE', __FILE__ );
 ! defined( 'WPCPQ_FILE' ) && define( 'WPCPQ_FILE', __FILE__ );
 ! defined( 'WPCPQ_DIR' ) && define( 'WPCPQ_DIR', plugin_dir_path( __FILE__ ) );
