@@ -266,7 +266,8 @@ function wpcpq_init_table($table, context) {
     jQuery(document.body).trigger('wpcpq_update_qty', [$table, qty, context]);
     jQuery(document.body).
         trigger('wpcpq_update_total', [$table, total, context]);
-    jQuery(document.body).trigger('wpcpq_init_table', [$table, context]);
+    jQuery(document.body).
+        trigger('wpcpq_init_table', [$table, total, qty, context]);
   } else {
     // reverse items first
     items = items.reverse();
@@ -315,7 +316,8 @@ function wpcpq_init_table($table, context) {
         trigger('wpcpq_update_price', [$table, price, context]);
     jQuery(document.body).
         trigger('wpcpq_update_total', [$table, qty * price, context]);
-    jQuery(document.body).trigger('wpcpq_init_table', [$table, context]);
+    jQuery(document.body).
+        trigger('wpcpq_init_table', [$table, qty * price, qty, context]);
   }
 }
 

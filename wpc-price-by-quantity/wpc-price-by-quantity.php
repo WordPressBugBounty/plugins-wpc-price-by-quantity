@@ -3,7 +3,7 @@
 Plugin Name: WPC Price by Quantity for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: Offering quantity-based prices would be one of the most effective and powerful methods to urge buyers with very few convincing actions needed.
-Version: 5.1.6
+Version: 5.1.7
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: wpc-price-by-quantity
@@ -12,14 +12,16 @@ Requires Plugins: woocommerce
 Requires at least: 4.0
 Tested up to: 6.7
 WC requires at least: 3.0
-WC tested up to: 9.3
+WC tested up to: 9.4
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.1.6' );
+! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.1.7' );
 ! defined( 'WPCPQ_LITE' ) && define( 'WPCPQ_LITE', __FILE__ );
 ! defined( 'WPCPQ_FILE' ) && define( 'WPCPQ_FILE', __FILE__ );
-! defined( 'WPCPQ_DIR' ) && define( 'WPCPQ_DIR', plugin_dir_path( __FILE__ ) );
 ! defined( 'WPCPQ_URI' ) && define( 'WPCPQ_URI', plugin_dir_url( __FILE__ ) );
+! defined( 'WPCPQ_DIR' ) && define( 'WPCPQ_DIR', plugin_dir_path( __FILE__ ) );
 ! defined( 'WPCPQ_SUPPORT' ) && define( 'WPCPQ_SUPPORT', 'https://wpclever.net/support?utm_source=support&utm_medium=wpcpq&utm_campaign=wporg' );
 ! defined( 'WPCPQ_REVIEWS' ) && define( 'WPCPQ_REVIEWS', 'https://wordpress.org/support/plugin/wpc-price-by-quantity/reviews/?filter=5' );
 ! defined( 'WPCPQ_CHANGELOG' ) && define( 'WPCPQ_CHANGELOG', 'https://wordpress.org/plugins/wpc-price-by-quantity/#developers' );
@@ -34,8 +36,6 @@ if ( ! function_exists( 'wpcpq_init' ) ) {
 	add_action( 'plugins_loaded', 'wpcpq_init', 11 );
 
 	function wpcpq_init() {
-		load_plugin_textdomain( 'wpc-price-by-quantity', false, basename( __DIR__ ) . '/languages/' );
-
 		if ( ! function_exists( 'WC' ) || ! version_compare( WC()->version, '3.0', '>=' ) ) {
 			add_action( 'admin_notices', 'wpcpq_notice_wc' );
 

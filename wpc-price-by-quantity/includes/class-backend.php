@@ -14,6 +14,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 		}
 
 		public function __construct() {
+			add_action( 'init', [ $this, 'init' ] );
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
 			// Settings
@@ -57,6 +58,10 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 
 			// Import
 			add_filter( 'woocommerce_product_import_pre_insert_product_object', [ $this, 'import_process' ], 10, 2 );
+		}
+
+		public function init() {
+			load_plugin_textdomain( 'wpc-price-by-quantity', false, basename( WPCPQ_DIR ) . '/languages/' );
 		}
 
 		public function product_data_tabs( $tabs ) {
