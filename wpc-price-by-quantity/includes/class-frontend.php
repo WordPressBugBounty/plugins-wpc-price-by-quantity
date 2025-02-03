@@ -214,7 +214,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 							$item_context = 'last';
 						}
 						?>
-                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class ) ); ?>" data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>" data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>" data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>" data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
+                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ); ?>" data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>" data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>" data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>" data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
 							<?php do_action( 'wpcpq_item_before', $key, $tiers, $item_context ); ?>
                             <div class="wpcpq-item-qty">
 								<?php
@@ -311,7 +311,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 							$item_context = 'last';
 						}
 						?>
-                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class ) ); ?>" data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>" data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>" data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>" data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
+                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ); ?>" data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>" data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>" data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>" data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
 							<?php do_action( 'wpcpq_item_before', $key, $tiers, $item_context ); ?>
                             <div class="wpcpq-item-info">
                                 <div class="wpcpq-item-qty">
@@ -392,7 +392,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 							$item_context = 'last';
 						}
 						?>
-                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class ) ); ?>" data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>" data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>" data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>" data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
+                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ); ?>" data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>" data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>" data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>" data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
 							<?php do_action( 'wpcpq_item_before', $key, $tiers, $item_context ); ?>
                             <div class="wpcpq-item-qty">
 								<?php
