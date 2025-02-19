@@ -169,41 +169,12 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 			}
 
 			foreach ( $prices as $key => $price ) {
+				if ( empty( $price ) ) {
+					continue;
+				}
+
 				$apply     = ! empty( $price['apply'] ) ? $price['apply'] : 'all';
 				$apply_val = ! empty( $price['apply_val'] ) ? explode( ',', $price['apply_val'] ) : [];
-
-				if ( $apply !== 'all' ) {
-					if ( $product->is_type( 'variation' ) ) {
-						// all attributes
-						$all_attrs = [];
-						$attrs     = $product->get_attributes();
-
-						if ( $taxonomies = get_object_taxonomies( 'product', 'objects' ) ) {
-							foreach ( $taxonomies as $taxonomy ) {
-								if ( str_starts_with( $taxonomy->name, 'pa_' ) ) {
-									$all_attrs[] = $taxonomy->name;
-								}
-							}
-						}
-
-						if ( in_array( $apply, $all_attrs ) ) {
-							if ( empty( $attrs[ $apply ] ) || ! in_array( $attrs[ $apply ], $apply_val ) ) {
-								// doesn't apply for current product
-								continue;
-							}
-						} else {
-							if ( ! has_term( $apply_val, $apply, $product_id ) && ! has_term( $apply_val, $apply, $parent_id ) ) {
-								// doesn't apply for current product
-								continue;
-							}
-						}
-					} else {
-						if ( ! has_term( $apply_val, $apply, $product_id ) ) {
-							// doesn't apply for current product
-							continue;
-						}
-					}
-				}
 
 				if ( ! empty( $price['role'] ) ) {
 					$role = $price['role'];
@@ -216,7 +187,42 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 					}
 				}
 
-				if ( ( in_array( $role, $roles ) || $role === 'all' ) && ! empty( $price ) ) {
+				// check role
+				if ( in_array( $role, $roles ) || $role === 'all' || $role === 'wpcpq_all' || ( $role === 'wpcpq_user' && is_user_logged_in() ) || ( $role === 'wpcpq_guest' && ! is_user_logged_in() ) ) {
+					// check apply
+					if ( $apply !== 'all' ) {
+						if ( $product->is_type( 'variation' ) ) {
+							// all attributes
+							$all_attrs = [];
+							$attrs     = $product->get_attributes();
+
+							if ( $taxonomies = get_object_taxonomies( 'product', 'objects' ) ) {
+								foreach ( $taxonomies as $taxonomy ) {
+									if ( str_starts_with( $taxonomy->name, 'pa_' ) ) {
+										$all_attrs[] = $taxonomy->name;
+									}
+								}
+							}
+
+							if ( in_array( $apply, $all_attrs ) ) {
+								if ( empty( $attrs[ $apply ] ) || ! in_array( $attrs[ $apply ], $apply_val ) ) {
+									// doesn't apply for current product
+									continue;
+								}
+							} else {
+								if ( ! has_term( $apply_val, $apply, $product_id ) && ! has_term( $apply_val, $apply, $parent_id ) ) {
+									// doesn't apply for current product
+									continue;
+								}
+							}
+						} else {
+							if ( ! has_term( $apply_val, $apply, $product_id ) ) {
+								// doesn't apply for current product
+								continue;
+							}
+						}
+					}
+
 					$pricing['role'] = $role;
 					$price_role      = $price;
 					break;

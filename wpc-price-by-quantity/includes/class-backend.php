@@ -34,11 +34,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 			// Single Product
 			add_filter( 'woocommerce_product_data_tabs', [ $this, 'product_data_tabs' ] );
 			add_action( 'woocommerce_product_data_panels', [ $this, 'product_data_panels' ] );
-			add_action( 'woocommerce_process_product_meta', [ $this, 'process_product_meta' ] );
 
 			// Variation
 			add_action( 'woocommerce_product_after_variable_attributes', [ $this, 'variation_settings' ], 99, 3 );
-			add_action( 'woocommerce_save_product_variation', [ $this, 'save_variation_settings' ], 99, 2 );
 
 			// WPC Variation Duplicator
 			add_action( 'wpcvd_duplicated', [ $this, 'duplicate_variation' ], 99, 2 );
@@ -145,40 +143,64 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 								<?php if ( $is_variation ) { ?>
                                     <option value="parent" <?php selected( $enable, 'parent' ); ?>><?php esc_html_e( 'Parent', 'wpc-price-by-quantity' ); ?></option>
 								<?php } ?>
-                                <option value="override" <?php selected( $enable, 'override' ); ?> disabled><?php esc_html_e( 'Override', 'wpc-price-by-quantity' ); ?></option>
+                                <option value="override" <?php selected( $enable, 'override' ); ?>><?php esc_html_e( 'Override', 'wpc-price-by-quantity' ); ?></option>
                             </select> </label>
                     </div>
                     <div style="color: #c9356e; padding-left: 12px; padding-right: 12px;">
                         Settings at a product/variation basis only available on the Premium Version.
-                        <a href="https://wpclever.net/downloads/wpc-price-by-quantity/?utm_source=pro&utm_medium=wpcpq&utm_campaign=wporg" target="_blank">Click here</a> to buy, just $29!
+                        <a href="https://wpclever.net/downloads/wpc-price-by-quantity/?utm_source=pro&utm_medium=wpcpq&utm_campaign=wporg"
+                           target="_blank">Click here</a> to buy, just $29!
                     </div>
+                </div>
+                <div class="wpcpq_settings_override"
+                     style="display: <?php echo esc_attr( $enable === 'override' ? 'block' : 'none' ); ?>;">
+					<?php do_action( 'wpcpq_product_settings_override_before', $product_id, $is_variation ); ?>
+                    <div class="wpcpq-items-wrapper">
+                        <div class="wpcpq-items wpcpq-roles">
+							<?php
+							$active = true;
+
+							if ( is_array( $prices ) && ! empty( $prices ) ) {
+								if ( isset( $prices['all'] ) ) {
+									// move old 'all' to the last for old version < 3.0
+									$all = $prices['all'];
+									unset( $prices['all'] );
+									$prices['all'] = $all;
+								}
+
+								foreach ( $prices as $key => $price ) {
+									include WPCPQ_DIR . 'includes/templates/role-price.php';
+									$active = false;
+								}
+							}
+							?>
+                        </div>
+                    </div>
+					<?php include WPCPQ_DIR . 'includes/templates/add-new.php'; ?>
+					<?php do_action( 'wpcpq_product_settings_override_after', $product_id, $is_variation ); ?>
                 </div>
 				<?php do_action( 'wpcpq_product_settings_after', $product_id, $is_variation ); ?>
             </div>
 			<?php
 		}
 
-		public function process_product_meta( $post_id ) {
-			if ( isset( $_POST['wpcpq_enable'] ) ) {
-				update_post_meta( $post_id, 'wpcpq_enable', sanitize_text_field( $_POST['wpcpq_enable'] ) );
-			}
-		}
-
-		function save_variation_settings( $post_id ) {
-			if ( isset( $_POST['wpcpq_enable_v'][ $post_id ] ) ) {
-				update_post_meta( $post_id, 'wpcpq_enable', sanitize_text_field( $_POST['wpcpq_enable_v'][ $post_id ] ) );
-			}
-		}
-
 		function duplicate_variation( $old_variation_id, $new_variation_id ) {
 			if ( $enable = get_post_meta( $old_variation_id, 'wpcpq_enable', true ) ) {
 				update_post_meta( $new_variation_id, 'wpcpq_enable', $enable );
+			}
+
+			if ( $rules = get_post_meta( $old_variation_id, 'wpcpq_prices', true ) ) {
+				update_post_meta( $new_variation_id, 'wpcpq_prices', $rules );
 			}
 		}
 
 		function bulk_update_variation( $variation_id, $fields ) {
 			if ( ! empty( $fields['wpcpq_enable_v'] ) && ( $fields['wpcpq_enable_v'] !== 'wpcvb_no_change' ) ) {
 				update_post_meta( $variation_id, 'wpcpq_enable', sanitize_text_field( $fields['wpcpq_enable_v'] ) );
+			}
+
+			if ( ! empty( $fields['wpcpq_enable_v'] ) && ( $fields['wpcpq_enable_v'] === 'override' ) && ! empty( $fields['wpcpq_prices_v'] ) ) {
+				update_post_meta( $variation_id, 'wpcpq_prices', Wpcpq_Helper()::sanitize_array( $fields['wpcpq_prices_v'] ) );
 			}
 		}
 
@@ -207,9 +229,12 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                     <p>
 						<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-price-by-quantity' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
                         <br/>
-                        <a href="<?php echo esc_url( WPCPQ_REVIEWS ); ?>" target="_blank"><?php esc_html_e( 'Reviews', 'wpc-price-by-quantity' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCPQ_CHANGELOG ); ?>" target="_blank"><?php esc_html_e( 'Changelog', 'wpc-price-by-quantity' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCPQ_DISCUSSION ); ?>" target="_blank"><?php esc_html_e( 'Discussion', 'wpc-price-by-quantity' ); ?></a>
+                        <a href="<?php echo esc_url( WPCPQ_REVIEWS ); ?>"
+                           target="_blank"><?php esc_html_e( 'Reviews', 'wpc-price-by-quantity' ); ?></a> |
+                        <a href="<?php echo esc_url( WPCPQ_CHANGELOG ); ?>"
+                           target="_blank"><?php esc_html_e( 'Changelog', 'wpc-price-by-quantity' ); ?></a> |
+                        <a href="<?php echo esc_url( WPCPQ_DISCUSSION ); ?>"
+                           target="_blank"><?php esc_html_e( 'Discussion', 'wpc-price-by-quantity' ); ?></a>
                     </p>
                 </div>
 				<?php if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) { ?>
@@ -219,13 +244,17 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 				<?php } ?>
                 <div class="wpclever_settings_page_nav">
                     <h2 class="nav-tab-wrapper">
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcpq&tab=settings' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcpq&tab=settings' ) ); ?>"
+                           class="<?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
 							<?php esc_html_e( 'Settings', 'wpc-price-by-quantity' ); ?>
                         </a>
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcpq&tab=localization' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'localization' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcpq&tab=localization' ) ); ?>"
+                           class="<?php echo esc_attr( $active_tab === 'localization' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
 							<?php esc_html_e( 'Localization', 'wpc-price-by-quantity' ); ?>
                         </a>
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcpq&tab=premium' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'premium' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>" style="color: #c9356e">
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcpq&tab=premium' ) ); ?>"
+                           class="<?php echo esc_attr( $active_tab === 'premium' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>"
+                           style="color: #c9356e">
 							<?php esc_html_e( 'Premium Version', 'wpc-price-by-quantity' ); ?>
                         </a>
                         <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-kit' ) ); ?>" class="nav-tab">
@@ -286,7 +315,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Active color', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_settings[active_color]" class="wpcpq_color_picker" value="<?php echo esc_attr( Wpcpq_Helper()::get_setting( 'active_color', $color_default ) ); ?>"/>
+                                            <input type="text" name="wpcpq_settings[active_color]"
+                                                   class="wpcpq_color_picker"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::get_setting( 'active_color', $color_default ) ); ?>"/>
                                         </label>
                                         <span class="description"><?php printf( /* translators: color */ esc_html__( 'Choose the color for the active price, default %s', 'wpc-price-by-quantity' ), '<code>' . esc_html( $color_default ) . '</code>' ); ?></span>
                                     </td>
@@ -295,7 +326,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Active background color', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_settings[active_bgcolor]" class="wpcpq_color_picker" value="<?php echo esc_attr( Wpcpq_Helper()::get_setting( 'active_bgcolor', $bgcolor_default ) ); ?>"/>
+                                            <input type="text" name="wpcpq_settings[active_bgcolor]"
+                                                   class="wpcpq_color_picker"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::get_setting( 'active_bgcolor', $bgcolor_default ) ); ?>"/>
                                         </label>
                                         <span class="description"><?php printf( /* translators: color */ esc_html__( 'Choose the background color for the active price, default %s', 'wpc-price-by-quantity' ), '<code>' . esc_html( $bgcolor_default ) . '</code>' ); ?></span>
                                     </td>
@@ -324,7 +357,8 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Default after text', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_settings[after_text_default]" value="<?php echo esc_attr( Wpcpq_Helper()::get_setting( 'after_text_default' ) ); ?>"/>
+                                            <input type="text" name="wpcpq_settings[after_text_default]"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::get_setting( 'after_text_default' ) ); ?>"/>
                                         </label>
                                         <span class="description"><?php esc_html_e( 'You can use [p] for percentage discount, [a] for amount discount. E.g: (saved [p])', 'wpc-price-by-quantity' ); ?></span>
                                     </td>
@@ -392,7 +426,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Quantity', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[quantity]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'quantity' ) ); ?>" placeholder="<?php esc_attr_e( 'Quantity', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[quantity]" class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'quantity' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( 'Quantity', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                     </td>
                                 </tr>
@@ -400,7 +436,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Price', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[price]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'price' ) ); ?>" placeholder="<?php esc_attr_e( 'Price', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[price]" class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'price' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( 'Price', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                     </td>
                                 </tr>
@@ -408,7 +446,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Tier Total', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[row_total]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'row_total' ) ); ?>" placeholder="<?php esc_attr_e( 'Tier Total', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[row_total]" class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'row_total' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( 'Tier Total', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                     </td>
                                 </tr>
@@ -416,7 +456,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Min outliers', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[min]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'min' ) ); ?>" placeholder="<?php esc_attr_e( '<{min}', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[min]" class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'min' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( '<{min}', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                         <span class="description"><?php esc_html_e( 'Values smaller than min.', 'wpc-price-by-quantity' ); ?></span>
                                     </td>
@@ -425,7 +467,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Single value', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[single]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'single' ) ); ?>" placeholder="<?php esc_attr_e( '{single}', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[single]" class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'single' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( '{single}', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                     </td>
                                 </tr>
@@ -433,7 +477,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Values between min and max', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[from_to]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'from_to' ) ); ?>" placeholder="<?php esc_attr_e( '{from} - {to}', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[from_to]" class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'from_to' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( '{from} - {to}', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                     </td>
                                 </tr>
@@ -441,7 +487,9 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Max & outliers', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[max]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'max' ) ); ?>" placeholder="<?php esc_attr_e( '{max}+', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[max]" class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'max' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( '{max}+', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                         <span class="description"><?php esc_html_e( 'Max quantity and larger values.', 'wpc-price-by-quantity' ); ?></span>
                                     </td>
@@ -456,31 +504,44 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                     <th><?php esc_html_e( 'Item quantity (singular)', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[qb_item_qty_singular]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_qty_singular' ) ); ?>" placeholder="<?php /* translators: qty */
-											esc_attr_e( '%s item', 'wpc-price-by-quantity' ); ?>"/> </label>
+                                            <input type="text" name="wpcpq_localization[qb_item_qty_singular]"
+                                                   class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_qty_singular' ) ); ?>"
+                                                   placeholder="<?php /* translators: qty */
+											       esc_attr_e( '%s item', 'wpc-price-by-quantity' ); ?>"/> </label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th><?php esc_html_e( 'Item quantity (plural)', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[qb_item_qty_plural]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_qty_plural' ) ); ?>" placeholder="<?php /* translators: qty */
-											esc_attr_e( '%s items', 'wpc-price-by-quantity' ); ?>"/> </label>
+                                            <input type="text" name="wpcpq_localization[qb_item_qty_plural]"
+                                                   class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_qty_plural' ) ); ?>"
+                                                   placeholder="<?php /* translators: qty */
+											       esc_attr_e( '%s items', 'wpc-price-by-quantity' ); ?>"/> </label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th><?php esc_html_e( 'Item price', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[qb_item_price]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_price' ) ); ?>" placeholder="<?php /* translators: price */
-											esc_attr_e( '%s for each product', 'wpc-price-by-quantity' ); ?>"/> </label>
+                                            <input type="text" name="wpcpq_localization[qb_item_price]"
+                                                   class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_price' ) ); ?>"
+                                                   placeholder="<?php /* translators: price */
+											       esc_attr_e( '%s for each product', 'wpc-price-by-quantity' ); ?>"/>
+                                        </label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th><?php esc_html_e( 'Add to cart', 'wpc-price-by-quantity' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" name="wpcpq_localization[qb_item_atc]" class="regular-text" value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_atc' ) ); ?>" placeholder="<?php esc_attr_e( 'Add to cart', 'wpc-price-by-quantity' ); ?>"/>
+                                            <input type="text" name="wpcpq_localization[qb_item_atc]"
+                                                   class="regular-text"
+                                                   value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_atc' ) ); ?>"
+                                                   placeholder="<?php esc_attr_e( 'Add to cart', 'wpc-price-by-quantity' ); ?>"/>
                                         </label>
                                     </td>
                                 </tr>
@@ -494,7 +555,8 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 					<?php } elseif ( $active_tab == 'premium' ) { ?>
                         <div class="wpclever_settings_page_content_text">
                             <p>Get the Premium Version just $29!
-                                <a href="https://wpclever.net/downloads/wpc-price-by-quantity?utm_source=pro&utm_medium=wpcpq&utm_campaign=wporg" target="_blank">https://wpclever.net/downloads/wpc-price-by-quantity</a>
+                                <a href="https://wpclever.net/downloads/wpc-price-by-quantity?utm_source=pro&utm_medium=wpcpq&utm_campaign=wporg"
+                                   target="_blank">https://wpclever.net/downloads/wpc-price-by-quantity</a>
                             </p>
                             <p><strong>Extra features for Premium Version:</strong></p>
                             <ul style="margin-bottom: 0">
@@ -511,12 +573,15 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                     <div class="wpclever_settings_page_suggestion_content">
                         <div>
                             To display custom engaging real-time messages on any wished positions, please install
-                            <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart Messages</a> plugin. It's free!
+                            <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart
+                                Messages</a> plugin. It's free!
                         </div>
                         <div>
                             Wanna save your precious time working on variations? Try our brand-new free plugin
-                            <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC Variation Bulk Editor</a> and
-                            <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC Variation Duplicator</a>.
+                            <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC
+                                Variation Bulk Editor</a> and
+                            <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC
+                                Variation Duplicator</a>.
                         </div>
                     </div>
                 </div>
@@ -702,7 +767,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 							'tiers'     => [],
 						], $price );
 						$role      = $price['role'];
-						$role_name = isset( $wp_roles->roles[ $role ] ) ? $wp_roles->roles[ $role ]['name'] : esc_html__( 'All users', 'wpc-price-by-quantity' );
+						$role_name = isset( $wp_roles->roles[ $role ] ) ? $wp_roles->roles[ $role ]['name'] : esc_html__( 'All', 'wpc-price-by-quantity' );
 
 						echo '<div class="wpcpq-overview-line">';
 						echo esc_html__( 'User role:', 'wpc-price-by-quantity' ) . ' <strong>' . esc_html( $role_name ) . '</strong><br/>';
