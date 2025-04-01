@@ -38,10 +38,11 @@ switch ( $role ) {
 		$role_name = isset( $wp_roles->roles[ $role ] ) ? $wp_roles->roles[ $role ]['name'] : esc_html__( 'All', 'wpc-price-by-quantity' );
 }
 
-$apply     = ! empty( $price['apply'] ) ? $price['apply'] : 'all';
-$apply_val = ! empty( $price['apply_val'] ) ? $price['apply_val'] : '';
-$method    = ! empty( $price['method'] ) ? $price['method'] : 'volume';
-$layout    = ! empty( $price['layout'] ) ? $price['layout'] : 'default';
+$apply          = ! empty( $price['apply'] ) ? $price['apply'] : 'all';
+$apply_val      = ! empty( $price['apply_val'] ) ? $price['apply_val'] : '';
+$method         = ! empty( $price['method'] ) ? $price['method'] : 'volume';
+$layout         = ! empty( $price['layout'] ) ? $price['layout'] : 'default';
+$exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale'] : 'no';
 ?>
 <div class="<?php echo esc_attr( $active ? 'wpcpq-item active' : 'wpcpq-item' ); ?>">
     <div class="wpcpq-item-header">
@@ -61,13 +62,16 @@ $layout    = ! empty( $price['layout'] ) ? $price['layout'] : 'default';
                         name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][apply]' ); ?>">
                     <option value="all" <?php selected( $apply, 'all' ); ?>><?php esc_attr_e( 'All products', 'wpc-price-by-quantity' ); ?></option>
 					<?php
-					$taxonomies = get_object_taxonomies( 'product', 'objects' ); //$taxonomies = get_taxonomies( [ 'object_type' => [ 'product' ] ], 'objects' );
+					$taxonomies = get_object_taxonomies( 'product', 'objects' );
 
 					foreach ( $taxonomies as $taxonomy ) {
 						echo '<option value="' . esc_attr( $taxonomy->name ) . '" ' . selected( $apply, $taxonomy->name, false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
 					}
 					?>
-                </select>
+                </select> <span><?php esc_html_e( 'Exclude on-sale products', 'wpc-price-by-quantity' ); ?> <input
+                            type="checkbox"
+                            name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][exclude_onsale]' ); ?>"
+                            value="yes" <?php echo esc_attr( wc_string_to_bool( $exclude_onsale ) ? 'checked' : '' ); ?>/></span>
             </div>
             <div class="hide_if_apply_all">
                 <input class="wpcpq_apply_val"

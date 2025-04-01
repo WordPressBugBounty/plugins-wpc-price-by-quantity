@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.2.0\n"
+"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.2.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-price-by-quantity\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-19T03:55:12+00:00\n"
+"POT-Creation-Date: 2025-04-01T17:25:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wpc-price-by-quantity\n"
@@ -246,7 +246,7 @@ msgid "Pricing table"
 msgstr ""
 
 #: includes/class-backend.php:420
-#: includes/templates/role-price.php:111
+#: includes/templates/role-price.php:115
 msgid "Default Table"
 msgstr ""
 
@@ -323,7 +323,7 @@ msgid "Max quantity and larger values."
 msgstr ""
 
 #: includes/class-backend.php:498
-#: includes/templates/role-price.php:112
+#: includes/templates/role-price.php:116
 msgid "Quick Buy Table"
 msgstr ""
 
@@ -369,19 +369,19 @@ msgstr ""
 
 #. translators: price
 #: includes/class-backend.php:705
-#: includes/templates/role-price.php:135
+#: includes/templates/role-price.php:139
 msgid "Set a price using a number (eg. \"10\") or percentage (e.g. \"%1$s\" of product price). Use ( %2$s ) as decimal separator."
 msgstr ""
 
 #. translators: price
 #: includes/class-backend.php:706
-#: includes/templates/role-price.php:141
+#: includes/templates/role-price.php:145
 msgid "Leave empty to use the default text."
 msgstr ""
 
 #: includes/class-backend.php:707
-#: includes/templates/role-price.php:52
-#: includes/templates/role-price.php:147
+#: includes/templates/role-price.php:53
+#: includes/templates/role-price.php:151
 msgid "remove"
 msgstr ""
 
@@ -456,54 +456,58 @@ msgstr ""
 msgid "+ Setup for role"
 msgstr ""
 
-#: includes/templates/role-price.php:48
+#: includes/templates/role-price.php:49
 msgid "move"
 msgstr ""
 
-#: includes/templates/role-price.php:51
+#: includes/templates/role-price.php:52
 msgid "duplicate"
 msgstr ""
 
-#: includes/templates/role-price.php:56
+#: includes/templates/role-price.php:57
 msgid "Apply for"
 msgstr ""
 
-#: includes/templates/role-price.php:62
+#: includes/templates/role-price.php:63
 msgid "All products"
 msgstr ""
 
-#: includes/templates/role-price.php:92
+#: includes/templates/role-price.php:71
+msgid "Exclude on-sale products"
+msgstr ""
+
+#: includes/templates/role-price.php:96
 msgid "Pricing method"
 msgstr ""
 
-#: includes/templates/role-price.php:95
+#: includes/templates/role-price.php:99
 msgid "Volume pricing: One unit price only that is corresponding to the quantity level will be applied. Tiered pricing: Multiple unit prices will be applied when the selected quantity covers over the tiers."
 msgstr ""
 
-#: includes/templates/role-price.php:98
+#: includes/templates/role-price.php:102
 msgid "Volume pricing"
 msgstr ""
 
-#: includes/templates/role-price.php:99
+#: includes/templates/role-price.php:103
 msgid "Tiered pricing"
 msgstr ""
 
-#: includes/templates/role-price.php:105
+#: includes/templates/role-price.php:109
 msgid "Layout"
 msgstr ""
 
-#: includes/templates/role-price.php:108
+#: includes/templates/role-price.php:112
 msgid "Choose the layout for the pricing table on a single product page."
 msgstr ""
 
-#: includes/templates/role-price.php:113
+#: includes/templates/role-price.php:117
 msgid "Compact"
 msgstr ""
 
-#: includes/templates/role-price.php:119
+#: includes/templates/role-price.php:123
 msgid "Quantity-based pricing options"
 msgstr ""
 
-#: includes/templates/role-price.php:157
+#: includes/templates/role-price.php:161
 msgid "+ New row"
 msgstr ""

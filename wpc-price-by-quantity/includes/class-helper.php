@@ -173,6 +173,13 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 					continue;
 				}
 
+				$exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale'] : 'no';
+
+				if ( wc_string_to_bool( $exclude_onsale ) && $product->is_on_sale() ) {
+					// exclude onsale products
+					continue;
+				}
+
 				$apply     = ! empty( $price['apply'] ) ? $price['apply'] : 'all';
 				$apply_val = ! empty( $price['apply_val'] ) ? explode( ',', $price['apply_val'] ) : [];
 
@@ -245,6 +252,13 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 					'apply_val' => '',
 					'tiers'     => []
 				], $pricing );
+			}
+
+			$min_qty      = $pricing['tiers'][0]['quantity'] ?? 1;
+			$max_purchase = $product->get_max_purchase_quantity();
+
+			if ( $max_purchase > 0 && $max_purchase < $min_qty ) {
+				$pricing = [];
 			}
 
 			return apply_filters( 'wpcpq_get_pricing', $pricing, $product_id, $context );

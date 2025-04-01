@@ -3,8 +3,8 @@ Contributors: wpclever
 Donate link: https://wpclever.net
 Tags: woocommerce, wpc, quantity, tiered pricing, volume pricing
 Tested up to: 6.7
-Version: 5.2.0
-Stable tag: 5.2.0
+Version: 5.2.1
+Stable tag: 5.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,9 @@ Please try other plugins from us:
 5. When adding/editing the product you can choose the Price by Quantity tab then add price tiers as you want
 
 == Changelog ==
+
+= 5.2.1 =
+* Added: Exclude on-sale products on each global rule
 
 = 5.2.0 =
 * Added: Pricing for User (logged in) and Guest (not logged in)
