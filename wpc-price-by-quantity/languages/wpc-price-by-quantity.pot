@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.2.1\n"
+"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-price-by-quantity\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-01T17:25:41+00:00\n"
+"POT-Creation-Date: 2025-05-07T04:19:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wpc-price-by-quantity\n"
@@ -257,20 +257,20 @@ msgstr ""
 
 #: includes/class-backend.php:426
 #: includes/class-backend.php:431
-#: includes/class-frontend.php:357
+#: includes/class-frontend.php:359
 msgid "Quantity"
 msgstr ""
 
 #: includes/class-backend.php:436
 #: includes/class-backend.php:441
 #: includes/class-backend.php:788
-#: includes/class-frontend.php:358
+#: includes/class-frontend.php:360
 msgid "Price"
 msgstr ""
 
 #: includes/class-backend.php:446
 #: includes/class-backend.php:451
-#: includes/class-frontend.php:360
+#: includes/class-frontend.php:362
 msgid "Tier Total"
 msgstr ""
 
@@ -279,8 +279,8 @@ msgid "Min outliers"
 msgstr ""
 
 #: includes/class-backend.php:461
-#: includes/class-frontend.php:183
-#: includes/class-frontend.php:372
+#: includes/class-frontend.php:185
+#: includes/class-frontend.php:374
 msgid "<{min}"
 msgstr ""
 
@@ -293,8 +293,8 @@ msgid "Single value"
 msgstr ""
 
 #: includes/class-backend.php:472
-#: includes/class-frontend.php:253
-#: includes/class-frontend.php:443
+#: includes/class-frontend.php:255
+#: includes/class-frontend.php:445
 msgid "{single}"
 msgstr ""
 
@@ -303,8 +303,8 @@ msgid "Values between min and max"
 msgstr ""
 
 #: includes/class-backend.php:482
-#: includes/class-frontend.php:244
-#: includes/class-frontend.php:434
+#: includes/class-frontend.php:246
+#: includes/class-frontend.php:436
 msgid "{from} - {to}"
 msgstr ""
 
@@ -313,8 +313,8 @@ msgid "Max & outliers"
 msgstr ""
 
 #: includes/class-backend.php:492
-#: includes/class-frontend.php:232
-#: includes/class-frontend.php:422
+#: includes/class-frontend.php:234
+#: includes/class-frontend.php:424
 msgid "{max}+"
 msgstr ""
 
@@ -333,7 +333,7 @@ msgstr ""
 
 #. translators: qty
 #: includes/class-backend.php:511
-#: includes/class-frontend.php:331
+#: includes/class-frontend.php:333
 msgid "%s item"
 msgstr ""
 
@@ -343,7 +343,7 @@ msgstr ""
 
 #. translators: qty
 #: includes/class-backend.php:522
-#: includes/class-frontend.php:331
+#: includes/class-frontend.php:333
 msgid "%s items"
 msgstr ""
 
@@ -353,13 +353,13 @@ msgstr ""
 
 #. translators: price
 #: includes/class-backend.php:533
-#: includes/class-frontend.php:338
+#: includes/class-frontend.php:340
 msgid "%s for each product"
 msgstr ""
 
 #: includes/class-backend.php:538
 #: includes/class-backend.php:544
-#: includes/class-frontend.php:350
+#: includes/class-frontend.php:352
 msgid "Add to cart"
 msgstr ""
 
@@ -434,11 +434,11 @@ msgstr ""
 msgid "Not set"
 msgstr ""
 
-#: includes/class-frontend.php:526
+#: includes/class-frontend.php:528
 msgid "Before price table"
 msgstr ""
 
-#: includes/class-frontend.php:527
+#: includes/class-frontend.php:529
 msgid "After price table"
 msgstr ""
 

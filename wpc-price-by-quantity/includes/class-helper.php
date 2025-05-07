@@ -112,11 +112,12 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 		}
 
 		public static function get_pricing( $product_id, $context = 'display' ) {
-			$product   = wc_get_product( $product_id );
-			$pricing   = [];
-			$prices    = [];
-			$enable_v  = 'global';
-			$parent_id = 0;
+			$product_id = apply_filters( 'wpcpq_get_pricing_product_id', $product_id, $context );
+			$product    = wc_get_product( $product_id );
+			$pricing    = [];
+			$prices     = [];
+			$enable_v   = 'global';
+			$parent_id  = 0;
 
 			if ( ! is_a( $product, 'WC_Product' ) ) {
 				return [];

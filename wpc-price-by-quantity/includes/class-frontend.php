@@ -132,6 +132,8 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 				$product_price = wc_get_price_to_display( $product );
 			}
 
+			$product_price = apply_filters( 'wpcpq_get_product_price', $product_price, $product );
+
 			if ( is_a( $product, 'WC_Product_Variation' ) ) {
 				$wrap_id = $product->get_parent_id();
 			} else {
