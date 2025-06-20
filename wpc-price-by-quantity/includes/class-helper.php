@@ -402,6 +402,13 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 			return $old_price;
 		}
 
+		public static function display_price( $price, $context = '' ) {
+			$price_prefix = apply_filters( 'wpcpq_price_prefix', '' );
+			$price_suffix = apply_filters( 'wpcpq_price_suffix', '' );
+
+			return apply_filters( 'wpcpq_display_price', $price_prefix . wc_price( $price ) . $price_suffix, $price, $context );
+		}
+
 		public static function is_enable( $product_id ) {
 			$is_enable = true;
 

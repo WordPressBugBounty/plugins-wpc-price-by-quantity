@@ -29,7 +29,7 @@ if ( ! class_exists( 'Wpcpq_Cart' ) ) {
 				return;
 			}
 
-			if ( self::$calculated ) {
+			if ( self::$calculated || apply_filters( 'wpcpq_ignore_cart', false, $cart_object ) ) {
 				return;
 			}
 
@@ -79,7 +79,7 @@ if ( ! class_exists( 'Wpcpq_Cart' ) ) {
 			$ori_price   = apply_filters( 'wpcpq_get_product_price', $ori_price, $ori_product );
 			$new_price   = $cart_item['data']->get_price();
 
-			if ( (float) $ori_price !== (float) $new_price ) {
+			if ( (float) $ori_price > (float) $new_price ) {
 				return apply_filters( 'wpcpq_cart_item_price', wc_format_sale_price( $ori_price, $new_price ), $price, $cart_item, $cart_item_key );
 			}
 

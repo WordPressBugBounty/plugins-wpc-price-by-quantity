@@ -348,7 +348,7 @@ function wpcpq_format_price(price) {
 
     price_html += '</span>';
 
-    return price_html;
+    return wpcpq_vars.price_prefix + price_html + wpcpq_vars.price_suffix;
 }
 
 function wpcpq_decode_entities(encodedString) {

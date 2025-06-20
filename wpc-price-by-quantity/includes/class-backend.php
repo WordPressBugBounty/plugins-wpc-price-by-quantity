@@ -224,19 +224,26 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 			$active_tab = sanitize_key( $_GET['tab'] ?? 'settings' );
 			?>
             <div class="wpclever_settings_page wrap">
-                <h1 class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Price by Quantity', 'wpc-price-by-quantity' ) . ' ' . esc_html( WPCPQ_VERSION ) . ' ' . ( defined( 'WPCPQ_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-price-by-quantity' ) . '</span>' : '' ); ?></h1>
-                <div class="wpclever_settings_page_desc about-text">
-                    <p>
-						<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-price-by-quantity' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
-                        <br/>
-                        <a href="<?php echo esc_url( WPCPQ_REVIEWS ); ?>"
-                           target="_blank"><?php esc_html_e( 'Reviews', 'wpc-price-by-quantity' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCPQ_CHANGELOG ); ?>"
-                           target="_blank"><?php esc_html_e( 'Changelog', 'wpc-price-by-quantity' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCPQ_DISCUSSION ); ?>"
-                           target="_blank"><?php esc_html_e( 'Discussion', 'wpc-price-by-quantity' ); ?></a>
-                    </p>
+                <div class="wpclever_settings_page_header">
+                    <a class="wpclever_settings_page_header_logo" href="https://wpclever.net/"
+                       target="_blank" title="Visit wpclever.net"></a>
+                    <div class="wpclever_settings_page_header_text">
+                        <div class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Price by Quantity', 'wpc-price-by-quantity' ) . ' ' . esc_html( WPCPQ_VERSION ) . ' ' . ( defined( 'WPCPQ_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-price-by-quantity' ) . '</span>' : '' ); ?></div>
+                        <div class="wpclever_settings_page_desc about-text">
+                            <p>
+								<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-price-by-quantity' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
+                                <br/>
+                                <a href="<?php echo esc_url( WPCPQ_REVIEWS ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Reviews', 'wpc-price-by-quantity' ); ?></a> |
+                                <a href="<?php echo esc_url( WPCPQ_CHANGELOG ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Changelog', 'wpc-price-by-quantity' ); ?></a> |
+                                <a href="<?php echo esc_url( WPCPQ_DISCUSSION ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Discussion', 'wpc-price-by-quantity' ); ?></a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
+                <h2></h2>
 				<?php if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) { ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php esc_html_e( 'Settings updated.', 'wpc-price-by-quantity' ); ?></p>
@@ -285,7 +292,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                                 <option value="under_excerpt" <?php selected( $position, 'under_excerpt' ); ?>><?php esc_html_e( 'Under the excerpt', 'wpc-price-by-quantity' ); ?></option>
                                                 <option value="under_meta" <?php selected( $position, 'under_meta' ); ?>><?php esc_html_e( 'Under the meta', 'wpc-price-by-quantity' ); ?></option>
                                                 <option value="under_summary" <?php selected( $position, 'under_summary' ); ?>><?php esc_html_e( 'Under the summary', 'wpc-price-by-quantity' ); ?></option>
-                                                <option value="no" <?php selected( $position, 'no' ); ?>><?php esc_html_e( 'No (hide it)', 'wpc-price-by-quantity' ); ?></option>
+                                                <option value="no" <?php selected( $position, 'no' ); ?>><?php esc_html_e( 'None (hide it)', 'wpc-price-by-quantity' ); ?></option>
                                             </select> </label>
                                         <p class="description"><?php printf( /* translators: shortcode */ esc_html__( 'Choose where to display the pricing table on a single product page; use %s shortcode to place it anywhere.', 'wpc-price-by-quantity' ), '<code>[wpcpq]</code>' ); ?></p>
                                     </td>
