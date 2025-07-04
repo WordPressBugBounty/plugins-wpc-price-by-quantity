@@ -176,7 +176,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 				if ( $layout === 'compact' ) {
 					?>
                     <div class="wpcpq-row wpcpq-item wpcpq-item-0 wpcpq-item-min wpcpq-item-default"
-                         data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $product_price ) ); ?>"
+                         data-price="<?php echo esc_attr( Wpcpq_Helper()::clean_price( $product_price ) ); ?>"
                          data-qty="<?php echo esc_attr( $tiers[0]['quantity'] ); ?>">
 						<?php do_action( 'wpcpq_item_before', 0, $tiers, 'first' ); ?>
                         <div class="wpcpq-item-qty">
@@ -205,11 +205,13 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 
 						do_action( 'wpcpq_item_after', 0, $tiers, 'first' ); ?>
                     </div>
-					<?php foreach ( $tiers as $key => $tier ) {
-						$tier = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
+					<?php
+					foreach ( $tiers as $key => $tier ) {
+						$tier       = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
+						$item_price = Wpcpq_Helper()::clean_price( $tier['price'] );
 
-						if ( empty( $tier['price'] ) ) {
-							$tier['price'] = '100%';
+						if ( $item_price === '' ) {
+							$item_price = '100%';
 						}
 
 						$item_class   = 'wpcpq-row wpcpq-item wpcpq-item-' . ( $key + 1 );
@@ -219,76 +221,82 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 							$item_class   .= ' wpcpq-item-max';
 							$item_context = 'last';
 						}
-						?>
-                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ); ?>"
-                             data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>"
-                             data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>"
-                             data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>"
-                             data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
-							<?php do_action( 'wpcpq_item_before', $key, $tiers, $item_context ); ?>
-                            <div class="wpcpq-item-qty">
-								<?php
-								if ( ( $key + 1 ) === count( $tiers ) ) {
-									// max
-									$qty_text = Wpcpq_Helper()::localization( 'max' );
 
-									if ( empty( $qty_text ) ) {
-										$qty_text = esc_html__( '{max}+', 'wpc-price-by-quantity' );
-									}
+						$item_attrs = apply_filters( 'wpcpq_item_data_attributes', [
+							'qty'      => $tier['quantity'],
+							'price'    => $item_price,
+							'prev-qty' => isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0',
+							'next-qty' => isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1'
+						], $key, $tiers, $item_context );
 
-									$qty_text = str_replace( '{max}', $tier['quantity'], $qty_text );
-								} else {
-									$from = floatval( $tier['quantity'] );
-									$to   = Wpcpq_Helper()::format_quantity( $tiers[ $key + 1 ]['quantity'] );
+						echo '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>';
 
-									if ( $from < $to ) {
-										$qty_text = Wpcpq_Helper()::localization( 'from_to' );
+						do_action( 'wpcpq_item_before', $key, $tiers, $item_context );
 
-										if ( empty( $qty_text ) ) {
-											$qty_text = esc_html__( '{from} - {to}', 'wpc-price-by-quantity' );
-										}
+						echo '<div class="wpcpq-item-qty">';
 
-										$qty_text = str_replace( '{from}', $from, $qty_text );
-										$qty_text = str_replace( '{to}', $to, $qty_text );
-									} else {
-										$qty_text = Wpcpq_Helper()::localization( 'single' );
+						if ( ( $key + 1 ) === count( $tiers ) ) {
+							// max
+							$qty_text = Wpcpq_Helper()::localization( 'max' );
 
-										if ( empty( $qty_text ) ) {
-											$qty_text = esc_html__( '{single}', 'wpc-price-by-quantity' );
-										}
+							if ( empty( $qty_text ) ) {
+								$qty_text = esc_html__( '{max}+', 'wpc-price-by-quantity' );
+							}
 
-										$qty_text = str_replace( '{single}', $from, $qty_text );
-									}
+							$qty_text = str_replace( '{max}', $tier['quantity'], $qty_text );
+						} else {
+							$from = floatval( $tier['quantity'] );
+							$to   = Wpcpq_Helper()::format_quantity( $tiers[ $key + 1 ]['quantity'] );
+
+							if ( $from < $to ) {
+								$qty_text = Wpcpq_Helper()::localization( 'from_to' );
+
+								if ( empty( $qty_text ) ) {
+									$qty_text = esc_html__( '{from} - {to}', 'wpc-price-by-quantity' );
 								}
 
-								echo wp_kses_post( apply_filters( 'wpcpq_item_qty', $qty_text, $tier, $product ) );
-								?>
-                            </div>
-							<?php
-							// item price
-							$tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::format_price( $tier['price'], $product_price ), ] );
-							echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>', $tier, $product, $tier_price ) );
+								$qty_text = str_replace( '{from}', $from, $qty_text );
+								$qty_text = str_replace( '{to}', $to, $qty_text );
+							} else {
+								$qty_text = Wpcpq_Helper()::localization( 'single' );
 
-							// item text
-							if ( Wpcpq_Helper()::get_setting( 'after_text', 'yes' ) === 'yes' ) {
-								$tier_text = ! empty( $tier['text'] ) ? $tier['text'] : Wpcpq_Helper()::get_setting( 'after_text_default' );
-								$tier_text = str_replace( '[p]', Wpcpq_Helper()::get_discount( $product_price, $tier_price ) . '%', $tier_text );
-								$tier_text = str_replace( '[a]', Wpcpq_Helper()::display_price( Wpcpq_Helper()::get_discount( $product_price, $tier_price, 'amount' ) ), $tier_text );
+								if ( empty( $qty_text ) ) {
+									$qty_text = esc_html__( '{single}', 'wpc-price-by-quantity' );
+								}
 
-								echo ' <span class="wpcpq-item-text">' . wp_kses_post( apply_filters( 'wpcpq_item_text', $tier_text, $product_price, $tier_price ) ) . '</span>';
+								$qty_text = str_replace( '{single}', $from, $qty_text );
 							}
+						}
 
-							echo '</div>';
+						echo wp_kses_post( apply_filters( 'wpcpq_item_qty', $qty_text, $tier, $product ) );
 
-							// item total
-							if ( $method === 'tiered' ) {
-								echo '<div class="wpcpq-item-total"> &nbsp; </div>';
-							}
+						echo '</div><!-- /.wpcpq-item-qty -->';
 
-							do_action( 'wpcpq_item_after', $key, $tiers, $item_context );
-							?>
-                        </div>
-					<?php }
+						// item price
+						$tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::calculate_price( $item_price, $product_price ), ] );
+						echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>', $tier, $product, $tier_price ) );
+
+						// item text
+						if ( Wpcpq_Helper()::get_setting( 'after_text', 'yes' ) === 'yes' ) {
+							$tier_text = ! empty( $tier['text'] ) ? $tier['text'] : Wpcpq_Helper()::get_setting( 'after_text_default' );
+							$tier_text = str_replace( '[p]', Wpcpq_Helper()::get_discount( $product_price, $tier_price ) . '%', $tier_text );
+							$tier_text = str_replace( '[a]', Wpcpq_Helper()::display_price( Wpcpq_Helper()::get_discount( $product_price, $tier_price, 'amount' ) ), $tier_text );
+
+							echo ' <span class="wpcpq-item-text">' . wp_kses_post( apply_filters( 'wpcpq_item_text', $tier_text, $product_price, $tier_price ) ) . '</span>';
+						}
+
+						echo '</div>';
+
+						// item total
+						if ( $method === 'tiered' ) {
+							echo '<div class="wpcpq-item-total"> &nbsp; </div>';
+						}
+
+						do_action( 'wpcpq_item_after', $key, $tiers, $item_context );
+
+						echo '</div><!-- /.wpcpq-item -->';
+					}
+
 					if ( apply_filters( 'wpcpq_layout_compact_summary', false ) ) {
 						?>
                         <div class="wpcpq-row wpcpq-summary">
@@ -302,17 +310,19 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 				} elseif ( $layout === 'quick_buy' ) {
 					?>
                     <div class="wpcpq-item wpcpq-item-0 wpcpq-item-min wpcpq-item-default"
-                         data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $product_price ) ); ?>"
+                         data-price="<?php echo esc_attr( Wpcpq_Helper()::clean_price( $product_price ) ); ?>"
                          data-qty="<?php echo esc_attr( $tiers[0]['quantity'] ); ?>">
 						<?php do_action( 'wpcpq_item_before', 0, $tiers, 'first' ); ?>
                         &nbsp;
 						<?php do_action( 'wpcpq_item_after', 0, $tiers, 'first' ); ?>
                     </div>
-					<?php foreach ( $tiers as $key => $tier ) {
-						$tier = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
+					<?php
+					foreach ( $tiers as $key => $tier ) {
+						$tier       = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
+						$item_price = Wpcpq_Helper()::clean_price( $tier['price'] );
 
-						if ( empty( $tier['price'] ) ) {
-							$tier['price'] = '100%';
+						if ( $item_price === '' ) {
+							$item_price = '100%';
 						}
 
 						$item_class   = 'wpcpq-item wpcpq-item-' . ( $key + 1 );
@@ -322,40 +332,47 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 							$item_class   .= ' wpcpq-item-max';
 							$item_context = 'last';
 						}
+
+						$item_attrs = apply_filters( 'wpcpq_item_data_attributes', [
+							'qty'      => $tier['quantity'],
+							'price'    => $item_price,
+							'prev-qty' => isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0',
+							'next-qty' => isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1'
+						], $key, $tiers, $item_context );
+
+						echo '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>';
+
+						do_action( 'wpcpq_item_before', $key, $tiers, $item_context );
 						?>
-                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ); ?>"
-                             data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>"
-                             data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>"
-                             data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>"
-                             data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
-							<?php do_action( 'wpcpq_item_before', $key, $tiers, $item_context ); ?>
-                            <div class="wpcpq-item-info">
-                                <div class="wpcpq-item-qty">
-									<?php
-									$item_qty = 1 === (int) $tier['quantity'] ? Wpcpq_Helper()::localization( 'qb_item_qty_singular', /* translators: qty */ esc_html__( '%s item', 'wpc-price-by-quantity' ) ) : Wpcpq_Helper()::localization( 'qb_item_qty_plural', /* translators: qty */ esc_html__( '%s items', 'wpc-price-by-quantity' ) );
-									echo wp_kses_post( apply_filters( 'wpcpq_item_qty', sprintf( $item_qty, number_format_i18n( $tier['quantity'] ) ), $tier, $product ) );
-									?>
-                                </div>
+                        <div class="wpcpq-item-info">
+                            <div class="wpcpq-item-qty">
 								<?php
-								// item price
-								$tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::format_price( $tier['price'], $product_price ), ] );
-								echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', sprintf( Wpcpq_Helper()::localization( 'qb_item_price', /* translators: price */ esc_html__( '%s for each product', 'wpc-price-by-quantity' ) ), '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>' ), $tier, $product, $tier_price ) ) . '</div>';
-
-								// item text
-								if ( Wpcpq_Helper()::get_setting( 'after_text', 'yes' ) === 'yes' ) {
-									$tier_text = ! empty( $tier['text'] ) ? $tier['text'] : Wpcpq_Helper()::get_setting( 'after_text_default' );
-									$tier_text = str_replace( '[p]', Wpcpq_Helper()::get_discount( $product_price, $tier_price ) . '%', $tier_text );
-									$tier_text = str_replace( '[a]', Wpcpq_Helper()::display_price( Wpcpq_Helper()::get_discount( $product_price, $tier_price, 'amount' ) ), $tier_text );
-
-									echo ' <div class="wpcpq-item-text">' . wp_kses_post( apply_filters( 'wpcpq_item_text', $tier_text, $product_price, $tier_price ) ) . '</div>';
-								} ?>
+								$item_qty = 1 === (int) $tier['quantity'] ? Wpcpq_Helper()::localization( 'qb_item_qty_singular', /* translators: qty */ esc_html__( '%s item', 'wpc-price-by-quantity' ) ) : Wpcpq_Helper()::localization( 'qb_item_qty_plural', /* translators: qty */ esc_html__( '%s items', 'wpc-price-by-quantity' ) );
+								echo wp_kses_post( apply_filters( 'wpcpq_item_qty', sprintf( $item_qty, number_format_i18n( $tier['quantity'] ) ), $tier, $product ) );
+								?>
                             </div>
-                            <div class="wpcpq-item-atc">
-								<?php echo wp_kses_post( apply_filters( 'wpcpq_item_atc', '<button type="button" class="wpcpq-item-atc-btn single_add_to_cart_button button alt">' . Wpcpq_Helper()::localization( 'qb_item_atc', esc_html__( 'Add to cart', 'wpc-price-by-quantity' ) ) . '</button>', $tier, $product ) ); ?>
-                            </div>
-							<?php do_action( 'wpcpq_item_after', $key, $tiers, $item_context ); ?>
+							<?php
+							// item price
+							$tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::calculate_price( $item_price, $product_price ), ] );
+							echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', sprintf( Wpcpq_Helper()::localization( 'qb_item_price', /* translators: price */ esc_html__( '%s for each product', 'wpc-price-by-quantity' ) ), '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>' ), $tier, $product, $tier_price ) ) . '</div>';
+
+							// item text
+							if ( Wpcpq_Helper()::get_setting( 'after_text', 'yes' ) === 'yes' ) {
+								$tier_text = ! empty( $tier['text'] ) ? $tier['text'] : Wpcpq_Helper()::get_setting( 'after_text_default' );
+								$tier_text = str_replace( '[p]', Wpcpq_Helper()::get_discount( $product_price, $tier_price ) . '%', $tier_text );
+								$tier_text = str_replace( '[a]', Wpcpq_Helper()::display_price( Wpcpq_Helper()::get_discount( $product_price, $tier_price, 'amount' ) ), $tier_text );
+
+								echo ' <div class="wpcpq-item-text">' . wp_kses_post( apply_filters( 'wpcpq_item_text', $tier_text, $product_price, $tier_price ) ) . '</div>';
+							} ?>
+                        </div><!-- /.wpcpq-item-info -->
+                        <div class="wpcpq-item-atc">
+							<?php echo wp_kses_post( apply_filters( 'wpcpq_item_atc', '<button type="button" class="wpcpq-item-atc-btn single_add_to_cart_button button alt">' . Wpcpq_Helper()::localization( 'qb_item_atc', esc_html__( 'Add to cart', 'wpc-price-by-quantity' ) ) . '</button>', $tier, $product ) ); ?>
                         </div>
-					<?php }
+						<?php
+						do_action( 'wpcpq_item_after', $key, $tiers, $item_context );
+
+						echo '</div><!-- /.wpcpq-item -->';
+					}
 				} else { ?>
                     <div class="wpcpq-row wpcpq-head">
                         <div class="wpcpq-row-qty"><?php echo Wpcpq_Helper()::localization( 'quantity', esc_html__( 'Quantity', 'wpc-price-by-quantity' ) ); ?></div>
@@ -365,7 +382,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 						} ?>
                     </div>
                     <div class="wpcpq-row wpcpq-item wpcpq-item-0 wpcpq-item-min wpcpq-item-default"
-                         data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $product_price ) ); ?>"
+                         data-price="<?php echo esc_attr( Wpcpq_Helper()::clean_price( $product_price ) ); ?>"
                          data-qty="<?php echo esc_attr( $tiers[0]['quantity'] ); ?>">
 						<?php do_action( 'wpcpq_item_before', 0, $tiers, 'first' ); ?>
                         <div class="wpcpq-item-qty">
@@ -395,11 +412,13 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 						do_action( 'wpcpq_item_after', 0, $tiers, 'first' );
 						?>
                     </div>
-					<?php foreach ( $tiers as $key => $tier ) {
-						$tier = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
+					<?php
+					foreach ( $tiers as $key => $tier ) {
+						$tier       = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
+						$item_price = Wpcpq_Helper()::clean_price( $tier['price'] );
 
-						if ( empty( $tier['price'] ) ) {
-							$tier['price'] = '100%';
+						if ( $item_price === '' ) {
+							$item_price = '100%';
 						}
 
 						$item_class   = 'wpcpq-row wpcpq-item wpcpq-item-' . ( $key + 1 );
@@ -409,76 +428,82 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 							$item_class   .= ' wpcpq-item-max';
 							$item_context = 'last';
 						}
+
+						$item_attrs = apply_filters( 'wpcpq_item_data_attributes', [
+							'qty'      => $tier['quantity'],
+							'price'    => $item_price,
+							'prev-qty' => isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0',
+							'next-qty' => isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1'
+						], $key, $tiers, $item_context );
+
+						echo '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>';
+
+						do_action( 'wpcpq_item_before', $key, $tiers, $item_context );
 						?>
-                        <div class="<?php echo esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ); ?>"
-                             data-price="<?php echo esc_attr( Wpcpq_Helper()::format_data_price( $tier['price'] ) ); ?>"
-                             data-qty="<?php echo esc_attr( $tier['quantity'] ); ?>"
-                             data-prev-qty="<?php echo esc_attr( isset( $tiers[ $key - 1 ] ) ? $tiers[ $key - 1 ]['quantity'] : '0' ); ?>"
-                             data-next-qty="<?php echo esc_attr( isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1' ); ?>">
-							<?php do_action( 'wpcpq_item_before', $key, $tiers, $item_context ); ?>
-                            <div class="wpcpq-item-qty">
-								<?php
-								if ( ( $key + 1 ) === count( $tiers ) ) {
-									// max
-									$qty_text = Wpcpq_Helper()::localization( 'max' );
+                        <div class="wpcpq-item-qty">
+							<?php
+							if ( ( $key + 1 ) === count( $tiers ) ) {
+								// max
+								$qty_text = Wpcpq_Helper()::localization( 'max' );
 
-									if ( empty( $qty_text ) ) {
-										$qty_text = esc_html__( '{max}+', 'wpc-price-by-quantity' );
-									}
-
-									$qty_text = str_replace( '{max}', $tier['quantity'], $qty_text );
-								} else {
-									$from = floatval( $tier['quantity'] );
-									$to   = Wpcpq_Helper()::format_quantity( $tiers[ $key + 1 ]['quantity'] );
-
-									if ( $from < $to ) {
-										$qty_text = Wpcpq_Helper()::localization( 'from_to' );
-
-										if ( empty( $qty_text ) ) {
-											$qty_text = esc_html__( '{from} - {to}', 'wpc-price-by-quantity' );
-										}
-
-										$qty_text = str_replace( '{from}', $from, $qty_text );
-										$qty_text = str_replace( '{to}', $to, $qty_text );
-									} else {
-										$qty_text = Wpcpq_Helper()::localization( 'single' );
-
-										if ( empty( $qty_text ) ) {
-											$qty_text = esc_html__( '{single}', 'wpc-price-by-quantity' );
-										}
-
-										$qty_text = str_replace( '{single}', $from, $qty_text );
-									}
+								if ( empty( $qty_text ) ) {
+									$qty_text = esc_html__( '{max}+', 'wpc-price-by-quantity' );
 								}
 
-								echo wp_kses_post( apply_filters( 'wpcpq_item_qty', $qty_text, $tier, $product ) );
-								?>
-                            </div>
-							<?php
-							// item price
-							$tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::format_price( $tier['price'], $product_price ), ] );
-							echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>', $tier, $product, $tier_price ) );
+								$qty_text = str_replace( '{max}', $tier['quantity'], $qty_text );
+							} else {
+								$from = floatval( $tier['quantity'] );
+								$to   = Wpcpq_Helper()::format_quantity( $tiers[ $key + 1 ]['quantity'] );
 
-							// item text
-							if ( Wpcpq_Helper()::get_setting( 'after_text', 'yes' ) === 'yes' ) {
-								$tier_text = ! empty( $tier['text'] ) ? $tier['text'] : Wpcpq_Helper()::get_setting( 'after_text_default' );
-								$tier_text = str_replace( '[p]', Wpcpq_Helper()::get_discount( $product_price, $tier_price ) . '%', $tier_text );
-								$tier_text = str_replace( '[a]', Wpcpq_Helper()::display_price( Wpcpq_Helper()::get_discount( $product_price, $tier_price, 'amount' ) ), $tier_text );
+								if ( $from < $to ) {
+									$qty_text = Wpcpq_Helper()::localization( 'from_to' );
 
-								echo ' <span class="wpcpq-item-text">' . wp_kses_post( apply_filters( 'wpcpq_item_text', $tier_text, $product_price, $tier_price ) ) . '</span>';
+									if ( empty( $qty_text ) ) {
+										$qty_text = esc_html__( '{from} - {to}', 'wpc-price-by-quantity' );
+									}
+
+									$qty_text = str_replace( '{from}', $from, $qty_text );
+									$qty_text = str_replace( '{to}', $to, $qty_text );
+								} else {
+									$qty_text = Wpcpq_Helper()::localization( 'single' );
+
+									if ( empty( $qty_text ) ) {
+										$qty_text = esc_html__( '{single}', 'wpc-price-by-quantity' );
+									}
+
+									$qty_text = str_replace( '{single}', $from, $qty_text );
+								}
 							}
 
-							echo '</div>';
-
-							// item total
-							if ( $method === 'tiered' ) {
-								echo '<div class="wpcpq-item-total"> &nbsp; </div>';
-							}
-
-							do_action( 'wpcpq_item_after', $key, $tiers, $item_context );
+							echo wp_kses_post( apply_filters( 'wpcpq_item_qty', $qty_text, $tier, $product ) );
 							?>
                         </div>
-					<?php } ?>
+						<?php
+						// item price
+						$tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::calculate_price( $item_price, $product_price ), ] );
+						echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>', $tier, $product, $tier_price ) );
+
+						// item text
+						if ( Wpcpq_Helper()::get_setting( 'after_text', 'yes' ) === 'yes' ) {
+							$tier_text = ! empty( $tier['text'] ) ? $tier['text'] : Wpcpq_Helper()::get_setting( 'after_text_default' );
+							$tier_text = str_replace( '[p]', Wpcpq_Helper()::get_discount( $product_price, $tier_price ) . '%', $tier_text );
+							$tier_text = str_replace( '[a]', Wpcpq_Helper()::display_price( Wpcpq_Helper()::get_discount( $product_price, $tier_price, 'amount' ) ), $tier_text );
+
+							echo ' <span class="wpcpq-item-text">' . wp_kses_post( apply_filters( 'wpcpq_item_text', $tier_text, $product_price, $tier_price ) ) . '</span>';
+						}
+
+						echo '</div>';
+
+						// item total
+						if ( $method === 'tiered' ) {
+							echo '<div class="wpcpq-item-total"> &nbsp; </div>';
+						}
+
+						do_action( 'wpcpq_item_after', $key, $tiers, $item_context );
+
+						echo '</div><!-- /.wpcpq-item -->';
+					}
+					?>
                     <div class="wpcpq-row wpcpq-foot wpcpq-summary">
                         <div class="wpcpq-summary-info"><span class="wpcpq-summary-qty"></span> &times;
                             <span class="wpcpq-summary-name"><?php echo esc_html( $product->get_name() ); ?></span>

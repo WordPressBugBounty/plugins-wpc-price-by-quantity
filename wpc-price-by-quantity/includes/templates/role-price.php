@@ -54,7 +54,7 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
     </div>
     <div class="wpcpq-item-content">
         <div class="wpcpq-item-line wpcpq-item-apply">
-            <label><?php esc_html_e( 'Apply for', 'wpc-price-by-quantity' ); ?></label>
+            <span><?php esc_html_e( 'Apply for', 'wpc-price-by-quantity' ); ?></span>
             <input type="hidden" name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][role]' ); ?>"
                    class="wpcpq_role" value="<?php echo esc_attr( $role ); ?>"/>
             <div>
@@ -93,10 +93,10 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
             </div>
         </div>
         <div class="wpcpq-item-line">
-            <label><?php esc_html_e( 'Pricing method', 'wpc-price-by-quantity' ); ?></label>
+            <span><?php esc_html_e( 'Pricing method', 'wpc-price-by-quantity' ); ?></span>
             <div>
-                <span class="hint--right"
-                      aria-label="<?php esc_attr_e( 'Volume pricing: One unit price only that is corresponding to the quantity level will be applied. Tiered pricing: Multiple unit prices will be applied when the selected quantity covers over the tiers.', 'wpc-price-by-quantity' ); ?>">
+                <span class="hint--right hint--big"
+                      aria-label="<?php esc_attr_e( 'Volume pricing: One unit price only that is corresponding to the quantity level will be applied. &#10; Tiered pricing: Multiple unit prices will be applied when the selected quantity covers over the tiers.', 'wpc-price-by-quantity' ); ?>">
                     <select class="wpcpq_method"
                             name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][method]' ); ?>">
                         <option value="volume" <?php selected( $method, 'volume' ); ?>><?php esc_attr_e( 'Volume pricing', 'wpc-price-by-quantity' ); ?></option>
@@ -106,9 +106,9 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
             </div>
         </div>
         <div class="wpcpq-item-line">
-            <label><?php esc_html_e( 'Layout', 'wpc-price-by-quantity' ); ?></label>
+            <span><?php esc_html_e( 'Layout', 'wpc-price-by-quantity' ); ?></span>
             <div>
-				<span class="hint--right"
+				<span class="hint--right hint--big"
                       aria-label="<?php esc_attr_e( 'Choose the layout for the pricing table on a single product page.', 'wpc-price-by-quantity' ); ?>">
 					<select class="wpcpq_layout"
                             name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][layout]' ); ?>">
@@ -120,24 +120,29 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
             </div>
         </div>
         <div class="wpcpq-item-line">
-            <label><?php esc_html_e( 'Quantity-based pricing options', 'wpc-price-by-quantity' ); ?></label>
+            <span><?php esc_html_e( 'Quantity-based pricing options', 'wpc-price-by-quantity' ); ?></span> <span
+                    class="hint--top hint--big"
+                    aria-label="<?php echo esc_attr( esc_html__( 'Set the price in numbers and the following characters: + / - / %. &#10; For example: &#10; +2: Increase the product price by 2 &#10; -5: Decrease the product price by 5 &#10; 10: Set the new product price as 10 &#10; 90%: Set the new product price as 90% of the original price.', 'wpc-price-by-quantity' ) ); ?>"><span
+                        class="wpcpq-help-tip"></span></span>
 			<?php
 			$count = 0;
 
 			if ( ! empty( $price['tiers'] ) && is_array( $price['tiers'] ) ) {
 				foreach ( $price['tiers'] as $tier ) {
-					$tier = array_merge( [ 'quantity' => '', 'price' => '', 'text' => '' ], $tier );
+					$tier       = array_merge( [ 'quantity' => '', 'price' => '', 'text' => '' ], $tier );
+					$tier_price = Wpcpq_Helper()::clean_price( $tier['price'] );
 					?>
                     <div class="input-panel wpcpq-quantity">
-                        <span class="wpcpq-qty-wrapper">
+                        <span class="wpcpq-qty-wrapper hint--top"
+                              aria-label="<?php esc_attr_e( 'Quantity', 'wpc-price-by-quantity' ); ?>">
                             <input type="number" value="<?php echo esc_attr( $tier['quantity'] ); ?>" min="0"
                                    step="0.0001" class="wpcpq-quantity-qty"
                                    placeholder="<?php echo esc_attr( 'quantity' ); ?>"
                                    name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][tiers][' . $count . '][quantity]' ); ?>"/>
                         </span>
                         <span class="wpcpq-price-wrapper hint--top"
-                              aria-label="<?php echo esc_attr( sprintf( /* translators: price */ esc_html__( 'Set a price using a number (eg. "10") or percentage (e.g. "%1$s" of product price). Use ( %2$s ) as decimal separator.', 'wpc-price-by-quantity' ), '90%', wc_get_price_decimal_separator() ) ); ?>">
-                            <input type="text" value="<?php echo esc_attr( $tier['price'] ); ?>"
+                              aria-label="<?php esc_attr_e( 'Price', 'wpc-price-by-quantity' ); ?>">
+                            <input type="text" value="<?php echo esc_attr( $tier_price ); ?>"
                                    placeholder="<?php echo esc_attr( 'price' ); ?>" class="wpcpq-quantity-price"
                                    name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][tiers][' . $count . '][price]' ); ?>"/>
                         </span>

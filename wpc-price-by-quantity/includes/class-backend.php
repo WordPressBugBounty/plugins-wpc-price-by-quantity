@@ -709,7 +709,8 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 			], WPCPQ_VERSION, true );
 			wp_localize_script( 'wpcpq-backend', 'wpcpq_vars', [
 				'nonce'       => wp_create_nonce( 'wpcpq-security' ),
-				'hint_price'  => htmlentities( sprintf( /* translators: price */ esc_html__( 'Set a price using a number (eg. "10") or percentage (e.g. "%1$s" of product price). Use ( %2$s ) as decimal separator.', 'wpc-price-by-quantity' ), '90%', wc_get_price_decimal_separator() ) ),
+				'hint_qty'    => esc_attr__( 'Quantity', 'wpc-price-by-quantity' ),
+				'hint_price'  => esc_attr__( 'Price', 'wpc-price-by-quantity' ),
 				'hint_text'   => esc_attr__( 'Leave empty to use the default text.', 'wpc-price-by-quantity' ),
 				'hint_remove' => esc_attr__( 'remove', 'wpc-price-by-quantity' ),
 			] );
@@ -791,7 +792,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 						echo esc_html__( 'Layout:', 'wpc-price-by-quantity' ) . ' ' . esc_html( $price['layout'] ) . '<br/>';
 
 						if ( ! empty( $price['tiers'] ) ) {
-							echo esc_html__( 'Quantity-based pricing options:', 'wpc-price-by-quantity' );
+							echo esc_html__( 'Quantity-based pricing options', 'wpc-price-by-quantity' ) . ':';
 							echo '<table><thead><tr><td>' . esc_html__( 'Qty', 'wpc-price-by-quantity' ) . '</td><td>' . esc_html__( 'Price', 'wpc-price-by-quantity' ) . '</td><td>' . esc_html__( 'Text', 'wpc-price-by-quantity' ) . '</td></tr></thead>';
 							echo '<tbody>';
 
@@ -807,7 +808,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 							echo '</tbody>';
 							echo '</table>';
 						} else {
-							echo esc_html__( 'Quantity-based pricing options:', 'wpc-price-by-quantity' ) . ' ' . esc_html__( 'Not set', 'wpc-price-by-quantity' );
+							echo esc_html__( 'Quantity-based pricing options', 'wpc-price-by-quantity' ) . ': ' . esc_html__( 'Not set', 'wpc-price-by-quantity' );
 						}
 
 						echo '</div>';

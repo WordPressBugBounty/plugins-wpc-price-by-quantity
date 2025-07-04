@@ -187,7 +187,15 @@ function wpcpq_init_table($table, context) {
         let $item = jQuery(item), item_price = $item.attr('data-price');
 
         if (/\%$/gm.test(item_price)) {
-            item_price = parseFloat(item_price.replace('%', '')) * price / 100;
+            item_price = parseFloat(item_price.replace('%', '')) * parseFloat(price) / 100;
+        }
+
+        if (/^\+/gm.test(item_price)) {
+            item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''))
+        }
+
+        if (/^-/gm.test(item_price)) {
+            item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''))
         }
 
         $item.find('.wpcpq-item-price-val').html(wpcpq_format_price(item_price));
@@ -202,7 +210,15 @@ function wpcpq_init_table($table, context) {
                 item_total = 0;
 
             if (/\%$/gm.test(item_price)) {
-                item_price = parseFloat(item_price.replace('%', '')) * price / 100;
+                item_price = parseFloat(item_price.replace('%', '')) * parseFloat(price) / 100;
+            }
+
+            if (/^\+/gm.test(item_price)) {
+                item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''))
+            }
+
+            if (/^-/gm.test(item_price)) {
+                item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''))
             }
 
             item_price = parseFloat(item_price).toFixed(wpcpq_vars.price_decimals);
@@ -259,7 +275,15 @@ function wpcpq_init_table($table, context) {
                 item_qty = parseFloat($item.attr('data-qty'));
 
             if (/\%$/gm.test(item_price)) {
-                item_price = parseFloat(item_price.replace('%', '')) * price / 100;
+                item_price = parseFloat(item_price.replace('%', '')) * parseFloat(price) / 100;
+            }
+
+            if (/^\+/gm.test(item_price)) {
+                item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''))
+            }
+
+            if (/^-/gm.test(item_price)) {
+                item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''))
             }
 
             item_price = parseFloat(item_price).toFixed(wpcpq_vars.price_decimals);

@@ -298,26 +298,43 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 			return $prices;
 		}
 
-		public static function format_price( $price, $current_price ) {
-			if ( ( $price === '' ) || ( $price === '100%' ) ) {
+		public static function clean_price( $price ) {
+			$clean_price = preg_replace( '/[^0-9+\-%.]/', '', $price );
+
+			return apply_filters( 'wpcpq_clean_price', $clean_price, $price );
+		}
+
+		public static function calculate_price( $price, $current_price ) {
+			if ( $price === '' || $price === '100%' ) {
 				$price = $current_price;
 			} else {
-				preg_match( '/[\d+\.{0,1}%{0,1}]+/', $price, $matches, PREG_OFFSET_CAPTURE, 0 );
-
-				if ( count( $matches ) > 0 ) {
-					$price = $matches[0][0];
+				if ( is_string( $price ) && str_starts_with( $price, '-' ) ) {
+					// decrease
+					$price = $current_price - floatval( str_replace( '-', '', $price ) );
 				}
 
-				if ( preg_match( '/%$/', $price ) ) {
-					$price = $current_price * floatval( preg_replace( '/%$/', '', $price ) ) / 100;
+				if ( is_string( $price ) && str_starts_with( $price, '+' ) ) {
+					// increase
+					$price = $current_price + floatval( str_replace( '+', '', $price ) );
+				}
+
+				if ( is_string( $price ) && str_ends_with( $price, '%' ) ) {
+					// percentage
+					$price = $current_price * floatval( str_replace( '%', '', $price ) ) / 100;
 				}
 			}
 
+			return apply_filters( 'wpcpq_calculate_price', (float) $price );
+		}
+
+		public static function format_price( $price, $current_price ) {
+			// deprecated < 5.3.0
 			return apply_filters( 'wpcpq_format_price', (float) $price );
 		}
 
 		public static function format_data_price( $price ) {
-			return apply_filters( 'wpcpq_format_data_price', trim( $price ) );
+			// deprecated < 5.3.0
+			return apply_filters( 'wpcpq_format_data_price', trim( self::clean_price( $price ) ) );
 		}
 
 		public static function format_quantity( $quantity ) {
@@ -360,7 +377,7 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 				foreach ( $tiers as $key => $tier ) {
 					$tier = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
 
-					if ( empty( $tier['price'] ) ) {
+					if ( $tier['price'] === '' ) {
 						$tier['price']          = '100%';
 						$tiers[ $key ]['price'] = '100%';
 					}
@@ -370,14 +387,14 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 					$prev_qty   = isset( $tiers[ $key - 1 ] ) ? (float) $tiers[ $key - 1 ]['quantity'] : 1;
 
 					if ( $quantity >= $tier_qty ) {
-						$total += ( $tier_qty - $prev_qty ) * self::format_price( $prev_price, $old_price );
+						$total += ( $tier_qty - $prev_qty ) * self::calculate_price( $prev_price, $old_price );
 
 						if ( ! isset( $tiers[ $key + 1 ] ) ) {
-							$total += ( $quantity - $tier_qty + $step ) * self::format_price( $tier['price'], $old_price );
+							$total += ( $quantity - $tier_qty + $step ) * self::calculate_price( $tier['price'], $old_price );
 							break;
 						}
 					} else {
-						$total += ( $quantity - $prev_qty + $step ) * self::format_price( $prev_price, $old_price );
+						$total += ( $quantity - $prev_qty + $step ) * self::calculate_price( $prev_price, $old_price );
 						break;
 					}
 				}
@@ -389,12 +406,12 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 				foreach ( $tiers as $tier ) {
 					$tier = array_merge( [ 'quantity' => 0, 'price' => '100%', 'text' => '' ], $tier );
 
-					if ( empty( $tier['price'] ) ) {
+					if ( $tier['price'] === '' ) {
 						$tier['price'] = '100%';
 					}
 
 					if ( $quantity >= (float) $tier['quantity'] ) {
-						return self::format_price( $tier['price'], $old_price );
+						return self::calculate_price( $tier['price'], $old_price );
 					}
 				}
 			}

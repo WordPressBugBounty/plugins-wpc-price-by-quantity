@@ -149,7 +149,7 @@
         }
 
         let htmlCode = `<div class="input-panel wpcpq-quantity">
-    <span class="wpcpq-qty-wrapper"><input type="number" min="0" step="0.0001" placeholder="quantity" class="wpcpq-quantity-qty" name="${name}[${key}][tiers][${index}][quantity]"></span>
+    <span class="wpcpq-qty-wrapper hint--top" aria-label="${wpcpq_vars.hint_qty}"><input type="number" min="0" step="0.0001" placeholder="quantity" class="wpcpq-quantity-qty" name="${name}[${key}][tiers][${index}][quantity]"></span>
     <span class="wpcpq-price-wrapper hint--top" aria-label="${wpcpq_vars.hint_price}"><input type="text" placeholder="price" class="wpcpq-quantity-price" name="${name}[${key}][tiers][${index}][price]"></span>
     <span class="wpcpq-text-wrapper hint--top" aria-label="${wpcpq_vars.hint_text}"><input type="text" placeholder="after text" class="wpcpq-quantity-text" name="${name}[${key}][tiers][${index}][text]"></span>
     <span class="wpcpq-remove-qty hint--top" aria-label="${wpcpq_vars.hint_remove}">&times;</span>
