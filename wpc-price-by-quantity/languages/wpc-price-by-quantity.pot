@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.3.0\n"
+"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-price-by-quantity\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-04T09:38:52+00:00\n"
+"POT-Creation-Date: 2025-07-09T02:20:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wpc-price-by-quantity\n"
@@ -246,7 +246,7 @@ msgid "Pricing table"
 msgstr ""
 
 #: includes/class-backend.php:427
-#: includes/templates/role-price.php:115
+#: includes/templates/role-price.php:117
 msgid "Default Table"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 #: includes/class-backend.php:438
 #: includes/class-backend.php:712
 #: includes/class-frontend.php:378
-#: includes/templates/role-price.php:137
+#: includes/templates/role-price.php:139
 msgid "Quantity"
 msgstr ""
 
@@ -268,7 +268,7 @@ msgstr ""
 #: includes/class-backend.php:713
 #: includes/class-backend.php:796
 #: includes/class-frontend.php:379
-#: includes/templates/role-price.php:144
+#: includes/templates/role-price.php:146
 msgid "Price"
 msgstr ""
 
@@ -327,7 +327,7 @@ msgid "Max quantity and larger values."
 msgstr ""
 
 #: includes/class-backend.php:505
-#: includes/templates/role-price.php:116
+#: includes/templates/role-price.php:118
 msgid "Quick Buy Table"
 msgstr ""
 
@@ -372,13 +372,13 @@ msgid "Community support"
 msgstr ""
 
 #: includes/class-backend.php:714
-#: includes/templates/role-price.php:150
+#: includes/templates/role-price.php:152
 msgid "Leave empty to use the default text."
 msgstr ""
 
 #: includes/class-backend.php:715
 #: includes/templates/role-price.php:53
-#: includes/templates/role-price.php:156
+#: includes/templates/role-price.php:158
 msgid "remove"
 msgstr ""
 
@@ -416,7 +416,7 @@ msgstr ""
 
 #: includes/class-backend.php:795
 #: includes/class-backend.php:811
-#: includes/templates/role-price.php:123
+#: includes/templates/role-price.php:125
 msgid "Quantity-based pricing options"
 msgstr ""
 
@@ -470,42 +470,46 @@ msgstr ""
 msgid "All products"
 msgstr ""
 
-#: includes/templates/role-price.php:71
+#: includes/templates/role-price.php:65
+msgid "Selected products (Premium)"
+msgstr ""
+
+#: includes/templates/role-price.php:73
 msgid "Exclude on-sale products"
 msgstr ""
 
-#: includes/templates/role-price.php:96
+#: includes/templates/role-price.php:98
 msgid "Pricing method"
 msgstr ""
 
-#: includes/templates/role-price.php:99
+#: includes/templates/role-price.php:101
 msgid "Volume pricing: One unit price only that is corresponding to the quantity level will be applied. &#10; Tiered pricing: Multiple unit prices will be applied when the selected quantity covers over the tiers."
 msgstr ""
 
-#: includes/templates/role-price.php:102
+#: includes/templates/role-price.php:104
 msgid "Volume pricing"
 msgstr ""
 
-#: includes/templates/role-price.php:103
+#: includes/templates/role-price.php:105
 msgid "Tiered pricing"
 msgstr ""
 
-#: includes/templates/role-price.php:109
+#: includes/templates/role-price.php:111
 msgid "Layout"
 msgstr ""
 
-#: includes/templates/role-price.php:112
+#: includes/templates/role-price.php:114
 msgid "Choose the layout for the pricing table on a single product page."
 msgstr ""
 
-#: includes/templates/role-price.php:117
+#: includes/templates/role-price.php:119
 msgid "Compact"
 msgstr ""
 
-#: includes/templates/role-price.php:125
+#: includes/templates/role-price.php:127
 msgid "Set the price in numbers and the following characters: + / - / %. &#10; For example: &#10; +2: Increase the product price by 2 &#10; -5: Decrease the product price by 5 &#10; 10: Set the new product price as 10 &#10; 90%: Set the new product price as 90% of the original price."
 msgstr ""
 
-#: includes/templates/role-price.php:166
+#: includes/templates/role-price.php:168
 msgid "+ New row"
 msgstr ""

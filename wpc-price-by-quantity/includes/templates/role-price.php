@@ -61,6 +61,8 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
                 <select class="wpcpq_apply"
                         name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][apply]' ); ?>">
                     <option value="all" <?php selected( $apply, 'all' ); ?>><?php esc_attr_e( 'All products', 'wpc-price-by-quantity' ); ?></option>
+                    <option value="products" <?php selected( $apply, 'products' ); ?>
+                            disabled><?php esc_attr_e( 'Selected products (Premium)', 'wpc-price-by-quantity' ); ?></option>
 					<?php
 					$taxonomies = get_object_taxonomies( 'product', 'objects' );
 
