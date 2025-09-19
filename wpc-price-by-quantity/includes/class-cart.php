@@ -29,7 +29,7 @@ if ( ! class_exists( 'Wpcpq_Cart' ) ) {
 				return;
 			}
 
-			if ( self::$calculated || apply_filters( 'wpcpq_ignore_cart', false, $cart_object ) ) {
+			if ( ( self::$calculated && apply_filters( 'wpcpq_calculate_once', true ) ) || apply_filters( 'wpcpq_ignore_cart', false, $cart_object ) ) {
 				return;
 			}
 

@@ -93,16 +93,18 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 		}
 
 		function available_variation( $available, $variable, $variation ) {
-			$enable = get_post_meta( $variation->get_id(), 'wpcpq_enable', true ) ?: 'parent';
+			if ( apply_filters( 'wpcpq_available_variation', true, $available, $variable, $variation ) ) {
+				$enable = get_post_meta( $variation->get_id(), 'wpcpq_enable', true ) ?: 'parent';
 
-			if ( $enable === 'parent' ) {
-				$enable = get_post_meta( $variation->get_parent_id(), 'wpcpq_enable', true ) ?: 'global';
-			}
+				if ( $enable === 'parent' ) {
+					$enable = get_post_meta( $variation->get_parent_id(), 'wpcpq_enable', true ) ?: 'global';
+				}
 
-			$available['wpcpq_enable'] = $enable;
+				$available['wpcpq_enable'] = $enable;
 
-			if ( $enable === 'override' || $enable === 'global' ) {
-				$available['wpcpq_table'] = htmlentities( self::get_table( $variation ) );
+				if ( $enable === 'override' || $enable === 'global' ) {
+					$available['wpcpq_table'] = htmlentities( self::get_table( $variation ) );
+				}
 			}
 
 			return $available;
