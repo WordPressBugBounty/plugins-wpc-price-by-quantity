@@ -15,9 +15,9 @@ if ( ! class_exists( 'Wpcpq_Cart' ) ) {
 		}
 
 		public function __construct() {
-			add_action( 'woocommerce_before_calculate_totals', [ $this, 'before_calculate_totals' ], 9999 );
-			add_action( 'woocommerce_before_mini_cart_contents', [ $this, 'mini_cart_contents' ], 9999 );
-			add_filter( 'woocommerce_cart_item_price', [ $this, 'cart_item_price' ], 10, 3 );
+			add_action( 'woocommerce_before_calculate_totals', [ $this, 'before_calculate_totals' ], 99999 );
+			add_action( 'woocommerce_before_mini_cart_contents', [ $this, 'mini_cart_contents' ], 99999 );
+			add_filter( 'woocommerce_cart_item_price', [ $this, 'cart_item_price' ], 99999, 3 );
 
 			// Backend Order
 			add_filter( 'woocommerce_ajax_add_order_item_meta', [ $this, 'add_order_item_meta' ], 10, 3 );

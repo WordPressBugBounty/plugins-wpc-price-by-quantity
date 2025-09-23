@@ -58,6 +58,14 @@
     $(document).on('found_variation', function (e, t) {
         var pid = $(e['target']).closest('.variations_form').data('product_id');
         var $wrap = $(document).find('.wpcpq-wrap-' + pid);
+        var $main_price = $('.wpcpq-price-' + pid);
+        var $qty = $(e['target']).closest('.variations_form').find('[name="quantity"]');
+
+        if ($main_price.data('o_price') === undefined) {
+            $main_price.data('o_price', $main_price.html());
+        }
+
+        $main_price.data('price', t['display_price']);
 
         if (t.wpcpq_enable === 'override' || t.wpcpq_enable === 'global') {
             if (t.wpcpq_table !== undefined) {
@@ -77,6 +85,14 @@
 
         let $table = $('.wpcpq-table-' + t['variation_id']);
 
+        var qty = $qty.val();
+
+        if (qty === '' || qty === undefined) {
+            qty = 1;
+        }
+
+        qty = parseFloat(qty);
+
         if ($table.length) {
             if (t['is_purchasable'] && t['is_in_stock']) {
                 $table.find('.wpcpq-item-atc-btn').removeClass('disabled');
@@ -86,6 +102,15 @@
 
             $table.attr('data-price', t['display_price']);
             wpcpq_init_table($table, 'found_variation');
+        } else {
+            // change the main price
+            if (wpcpq_vars.main_price === 'total') {
+                $main_price.html(wpcpq_format_price(qty * t['display_price']));
+            }
+
+            if (wpcpq_vars.main_price === 'price') {
+                $main_price.html(wpcpq_format_price(t['display_price']));
+            }
         }
 
         $(document.body).trigger('wpcpq_found_variation');
@@ -94,7 +119,14 @@
     $(document).on('reset_data', function (e) {
         let pid = $(e['target']).closest('.variations_form').data('product_id');
         let $wrap = $(document).find('.wpcpq-wrap-' + pid);
+        var $main_price = $('.wpcpq-price-' + pid);
         let variable_table = $('.wpcpq-variable-' + pid).data('wpcpq');
+
+        if ($main_price.data('o_price') !== undefined) {
+            $main_price.html($main_price.data('o_price'));
+        }
+
+        $main_price.data('price', '');
 
         if (variable_table !== undefined) {
             $wrap.replaceWith(wpcpq_decode_entities(variable_table));
@@ -129,17 +161,32 @@
     });
 
     $(document).on('change keyup', 'form.cart [name="quantity"]', function () {
-        let $this = $(this), id = $this.closest('form.cart').find('.wpcpq-id').attr('data-id'),
-            $table = $('.wpcpq-table-' + id);
+        let $this = $(this), qty = $this.val(), pid = $this.closest('form.cart').find('.wpcpq-id').attr('data-id'),
+            $table = $('.wpcpq-table-' + pid), $main_price = $('.wpcpq-price-' + pid);
+
+        if (qty === '' || qty === undefined) {
+            qty = 1;
+        }
 
         if (!$table.length) {
-            $table = $('.wpcpq-wrap-' + id).find('.wpcpq-table');
+            $table = $('.wpcpq-wrap-' + pid).find('.wpcpq-table');
         }
 
         if ($table.length) {
             $table.each(function () {
                 wpcpq_init_table($(this), 'quantity');
             });
+        } else {
+            // change the main price
+            if ($main_price.data('price') !== '' && $main_price.data('price') !== undefined) {
+                if (wpcpq_vars.main_price === 'total') {
+                    $main_price.html(wpcpq_format_price(qty * parseFloat($main_price.data('price'))));
+                }
+
+                if (wpcpq_vars.main_price === 'price') {
+                    $main_price.html(wpcpq_format_price(parseFloat($main_price.data('price'))));
+                }
+            }
         }
     });
 })(jQuery);
@@ -159,6 +206,10 @@ function wpcpq_init_table($table, context) {
         $main_price = jQuery('.wpcpq-price-' + wid),
         $qty = jQuery('.wpcpq-id-' + id).closest('form.cart').find('[name="quantity"]');
 
+    if ($main_price.data('o_price') === undefined) {
+        $main_price.data('o_price', $main_price.html());
+    }
+
     if (!$qty.length) {
         $qty = jQuery('.wpcpq-id-' + wid).closest('form.cart').find('[name="quantity"]');
     }
@@ -176,7 +227,7 @@ function wpcpq_init_table($table, context) {
 
     let qty = $qty.val();
 
-    if (qty === '') {
+    if (qty === '' || qty === undefined) {
         qty = 1;
     }
 
@@ -186,7 +237,7 @@ function wpcpq_init_table($table, context) {
     for (let item of items) {
         let $item = jQuery(item), item_price = $item.attr('data-price');
 
-        if (/\%$/gm.test(item_price)) {
+        if (/%$/gm.test(item_price)) {
             item_price = parseFloat(item_price.replace('%', '')) * parseFloat(price) / 100;
         }
 
@@ -209,7 +260,7 @@ function wpcpq_init_table($table, context) {
                 item_qty = parseFloat($item.attr('data-qty')), next_qty = parseFloat($item.attr('data-next-qty')),
                 item_total = 0;
 
-            if (/\%$/gm.test(item_price)) {
+            if (/%$/gm.test(item_price)) {
                 item_price = parseFloat(item_price.replace('%', '')) * parseFloat(price) / 100;
             }
 
@@ -257,9 +308,17 @@ function wpcpq_init_table($table, context) {
         $table.find('.wpcpq-summary-total').html(wpcpq_format_price(total));
         $table.show();
 
-        // change main price
+        // change the main price
         if (wpcpq_vars.main_price === 'total') {
             $main_price.html(wpcpq_format_price(total));
+        }
+
+        if (wpcpq_vars.main_price === 'price') {
+            if ($main_price.data('price') !== '' && $main_price.data('price') !== undefined) {
+                $main_price.html(wpcpq_format_price(parseFloat($main_price.data('price'))));
+            } else if ($main_price.data('o_price') !== '' && $main_price.data('o_price') !== undefined) {
+                $main_price.html($main_price.data('o_price'));
+            }
         }
 
         // triggers
@@ -274,7 +333,7 @@ function wpcpq_init_table($table, context) {
             let $item = jQuery(item), item_price = $item.attr('data-price'),
                 item_qty = parseFloat($item.attr('data-qty'));
 
-            if (/\%$/gm.test(item_price)) {
+            if (/%$/gm.test(item_price)) {
                 item_price = parseFloat(item_price.replace('%', '')) * parseFloat(price) / 100;
             }
 
@@ -307,7 +366,7 @@ function wpcpq_init_table($table, context) {
         $table.find('.wpcpq-summary-total').html(wpcpq_format_price(qty * price));
         $table.show();
 
-        // change main price
+        // change the main price
         if (wpcpq_vars.main_price === 'total') {
             $main_price.html(wpcpq_format_price(qty * price));
         }
