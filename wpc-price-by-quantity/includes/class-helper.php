@@ -57,7 +57,7 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 				if ( is_array( $v ) ) {
 					$arr[ $k ] = self::sanitize_array( $v );
 				} else {
-					$arr[ $k ] = sanitize_post_field( 'post_content', $v, 0, 'display' );
+					$arr[ $k ] = sanitize_post_field( 'post_content', $v, 0, 'db' );
 				}
 			}
 
@@ -255,11 +255,13 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 				], $pricing );
 			}
 
-			$min_qty      = $pricing['tiers'][0]['quantity'] ?? 1;
-			$max_purchase = $product->get_max_purchase_quantity();
+			if ( apply_filters( 'wpcpq_check_purchasable_quantity', self::get_setting( 'low_stock', 'yes' ) === 'yes' ) ) {
+				$min_qty      = $pricing['tiers'][0]['quantity'] ?? 1;
+				$max_purchase = $product->get_max_purchase_quantity();
 
-			if ( $max_purchase > 0 && $max_purchase < $min_qty ) {
-				$pricing = [];
+				if ( $max_purchase > 0 && $max_purchase < $min_qty ) {
+					$pricing = [];
+				}
 			}
 
 			return apply_filters( 'wpcpq_get_pricing', $pricing, $product_id, $context );

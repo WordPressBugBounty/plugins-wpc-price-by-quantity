@@ -242,11 +242,11 @@ function wpcpq_init_table($table, context) {
         }
 
         if (/^\+/gm.test(item_price)) {
-            item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''))
+            item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''));
         }
 
         if (/^-/gm.test(item_price)) {
-            item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''))
+            item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''));
         }
 
         $item.find('.wpcpq-item-price-val').html(wpcpq_format_price(item_price));
@@ -265,14 +265,16 @@ function wpcpq_init_table($table, context) {
             }
 
             if (/^\+/gm.test(item_price)) {
-                item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''))
+                item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''));
             }
 
             if (/^-/gm.test(item_price)) {
-                item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''))
+                item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''));
             }
 
-            item_price = parseFloat(item_price).toFixed(wpcpq_vars.price_decimals);
+            if (wpcpq_vars.round_price) {
+                item_price = parseFloat(item_price).toFixed(wpcpq_vars.price_decimals);
+            }
 
             $item.addClass('wpcpq-item-active');
 
@@ -338,14 +340,16 @@ function wpcpq_init_table($table, context) {
             }
 
             if (/^\+/gm.test(item_price)) {
-                item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''))
+                item_price = parseFloat(price) + parseFloat(item_price.replace('+', ''));
             }
 
             if (/^-/gm.test(item_price)) {
-                item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''))
+                item_price = parseFloat(price) - parseFloat(item_price.replace('-', ''));
             }
 
-            item_price = parseFloat(item_price).toFixed(wpcpq_vars.price_decimals);
+            if (wpcpq_vars.round_price) {
+                item_price = parseFloat(item_price).toFixed(wpcpq_vars.price_decimals);
+            }
 
             if (qty >= item_qty) {
                 $item.addClass('wpcpq-item-active');
