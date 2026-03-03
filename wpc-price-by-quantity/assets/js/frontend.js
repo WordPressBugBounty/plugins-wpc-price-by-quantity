@@ -250,6 +250,7 @@ function wpcpq_init_table($table, context) {
         }
 
         $item.find('.wpcpq-item-price-val').html(wpcpq_format_price(item_price));
+        jQuery(document.body).trigger('wpcpq_update_item_price', [item_price, $item, context]);
     }
 
     if (method === 'tiered') {
