@@ -10,32 +10,26 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! str_contains( $key, '**' ) ) {
-	$role = $key;
-	$key  = Wpcpq_Helper()::generate_key() . '**' . $role;
-} else {
-	$key_arr = explode( '**', $key );
-	$role    = ! empty( $key_arr[1] ) ? $key_arr[1] : 'all';
-}
-
 global $wp_roles;
 
+$role = ! empty( $price['role'] ) ? $price['role'] : 'wpcpq_all';
+
 switch ( $role ) {
-	case 'all':
-	case 'wpcpq_all':
-		$role_name = esc_html__( 'All', 'wpc-price-by-quantity' );
-		break;
+    case 'all':
+    case 'wpcpq_all':
+        $role_name = esc_html__( 'All', 'wpc-price-by-quantity' );
+        break;
 
-	case 'wpcpq_user':
-		$role_name = esc_html__( 'User (logged in)', 'wpc-price-by-quantity' );
-		break;
+    case 'wpcpq_user':
+        $role_name = esc_html__( 'User (logged in)', 'wpc-price-by-quantity' );
+        break;
 
-	case 'wpcpq_guest':
-		$role_name = esc_html__( 'Guest (not logged in)', 'wpc-price-by-quantity' );
-		break;
+    case 'wpcpq_guest':
+        $role_name = esc_html__( 'Guest (not logged in)', 'wpc-price-by-quantity' );
+        break;
 
-	default:
-		$role_name = isset( $wp_roles->roles[ $role ] ) ? $wp_roles->roles[ $role ]['name'] : esc_html__( 'All', 'wpc-price-by-quantity' );
+    default:
+        $role_name = isset( $wp_roles->roles[ $role ] ) ? $wp_roles->roles[ $role ]['name'] : esc_html__( 'All', 'wpc-price-by-quantity' );
 }
 
 $apply          = ! empty( $price['apply'] ) ? $price['apply'] : 'all';
@@ -43,8 +37,9 @@ $apply_val      = ! empty( $price['apply_val'] ) ? $price['apply_val'] : '';
 $method         = ! empty( $price['method'] ) ? $price['method'] : 'volume';
 $layout         = ! empty( $price['layout'] ) ? $price['layout'] : 'default';
 $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale'] : 'no';
+$class          = 'wpcpq-item wpcpq-item-' . $key . ( $active ? ' active' : '' );
 ?>
-<div class="<?php echo esc_attr( $active ? 'wpcpq-item active' : 'wpcpq-item' ); ?>">
+<div class="<?php echo esc_attr( $class ); ?>">
     <div class="wpcpq-item-header">
         <span class="wpcpq-item-move ui-sortable-handle"><?php esc_html_e( 'move', 'wpc-price-by-quantity' ); ?></span>
         <span class="wpcpq-item-label"><span class="wpcpq-label-role"><?php echo esc_html( $role_name ); ?></span> <span
@@ -63,13 +58,13 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
                     <option value="all" <?php selected( $apply, 'all' ); ?>><?php esc_attr_e( 'All products', 'wpc-price-by-quantity' ); ?></option>
                     <option value="products" <?php selected( $apply, 'products' ); ?>
                             disabled><?php esc_attr_e( 'Selected products (Premium)', 'wpc-price-by-quantity' ); ?></option>
-					<?php
-					$taxonomies = get_object_taxonomies( 'product', 'objects' );
+                    <?php
+                    $taxonomies = get_object_taxonomies( 'product', 'objects' );
 
-					foreach ( $taxonomies as $taxonomy ) {
-						echo '<option value="' . esc_attr( $taxonomy->name ) . '" ' . selected( $apply, $taxonomy->name, false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
-					}
-					?>
+                    foreach ( $taxonomies as $taxonomy ) {
+                        echo '<option value="' . esc_attr( $taxonomy->name ) . '" ' . selected( $apply, $taxonomy->name, false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
+                    }
+                    ?>
                 </select> <span><?php esc_html_e( 'Exclude on-sale products', 'wpc-price-by-quantity' ); ?> <input
                             type="checkbox"
                             name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][exclude_onsale]' ); ?>"
@@ -79,18 +74,18 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
                 <input class="wpcpq_apply_val"
                        name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][apply_val]' ); ?>"
                        type="hidden" value="<?php echo esc_attr( $apply_val ); ?>"/>
-				<?php if ( ! is_array( $apply_val ) ) {
-					$apply_val = array_map( 'trim', explode( ',', $apply_val ) );
-				} ?>
+                <?php if ( ! is_array( $apply_val ) ) {
+                    $apply_val = array_map( 'trim', explode( ',', $apply_val ) );
+                } ?>
                 <select class="wpcpq_terms" multiple="multiple"
                         data-<?php echo esc_attr( $apply ); ?>="<?php echo esc_attr( implode( ',', $apply_val ) ); ?>">
-					<?php if ( is_array( $apply_val ) && ! empty( $apply_val ) ) {
-						foreach ( $apply_val as $t ) {
-							if ( $term = get_term_by( 'slug', $t, $apply ) ) {
-								echo '<option value="' . esc_attr( $t ) . '" selected>' . esc_html( $term->name ) . '</option>';
-							}
-						}
-					} ?>
+                    <?php if ( is_array( $apply_val ) && ! empty( $apply_val ) ) {
+                        foreach ( $apply_val as $t ) {
+                            if ( $term = get_term_by( 'slug', $t, $apply ) ) {
+                                echo '<option value="' . esc_attr( $t ) . '" selected>' . esc_html( $term->name ) . '</option>';
+                            }
+                        }
+                    } ?>
                 </select>
             </div>
         </div>
@@ -126,14 +121,14 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
                     class="hint--top hint--big"
                     aria-label="<?php echo esc_attr( esc_html__( 'Set the price in numbers and the following characters: + / - / %. &#10; For example: &#10; +2: Increase the product price by 2 &#10; -5: Decrease the product price by 5 &#10; 10: Set the new product price as 10 &#10; 90%: Set the new product price as 90% of the original price.', 'wpc-price-by-quantity' ) ); ?>"><span
                         class="wpcpq-help-tip"></span></span>
-			<?php
-			$count = 0;
+            <?php
+            $count = 0;
 
-			if ( ! empty( $price['tiers'] ) && is_array( $price['tiers'] ) ) {
-				foreach ( $price['tiers'] as $tier ) {
-					$tier       = array_merge( [ 'quantity' => '', 'price' => '', 'text' => '' ], $tier );
-					$tier_price = Wpcpq_Helper()::clean_price( $tier['price'] );
-					?>
+            if ( ! empty( $price['tiers'] ) && is_array( $price['tiers'] ) ) {
+                foreach ( $price['tiers'] as $tier ) {
+                    $tier       = array_merge( [ 'quantity' => '', 'price' => '', 'text' => '' ], $tier );
+                    $tier_price = Wpcpq_Helper()::clean_price( $tier['price'] );
+                    ?>
                     <div class="input-panel wpcpq-quantity">
                         <span class="wpcpq-qty-wrapper hint--top"
                               aria-label="<?php esc_attr_e( 'Quantity', 'wpc-price-by-quantity' ); ?>">
@@ -157,15 +152,15 @@ $exclude_onsale = ! empty( $price['exclude_onsale'] ) ? $price['exclude_onsale']
                         <span class="wpcpq-remove-qty hint--top"
                               aria-label="<?php esc_attr_e( 'remove', 'wpc-price-by-quantity' ); ?>">&times;</span>
                     </div>
-					<?php
-					$count ++;
-				}
-			} ?>
+                    <?php
+                    $count ++;
+                }
+            } ?>
             <button class="button wpcpq-add-qty" type="button"
                     data-id="<?php echo esc_attr( $is_variation ? $product_id : 0 ); ?>"
                     data-key="<?php echo esc_attr( $key ); ?>"
                     data-count="<?php echo esc_attr( is_array( $price['tiers'] ) && ! empty( $price['tiers'] ) ? count( $price['tiers'] ) : 0 ); ?>">
-				<?php esc_html_e( '+ New row', 'wpc-price-by-quantity' ); ?>
+                <?php esc_html_e( '+ New row', 'wpc-price-by-quantity' ); ?>
             </button>
         </div>
     </div>

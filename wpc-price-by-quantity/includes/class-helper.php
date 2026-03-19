@@ -181,19 +181,9 @@ if ( ! class_exists( 'Wpcpq_Helper' ) ) {
 					continue;
 				}
 
+				$role      = $price['role'] ?? 'wpcpq_all';
 				$apply     = ! empty( $price['apply'] ) ? $price['apply'] : 'all';
 				$apply_val = ! empty( $price['apply_val'] ) ? explode( ',', $price['apply_val'] ) : [];
-
-				if ( ! empty( $price['role'] ) ) {
-					$role = $price['role'];
-				} else {
-					if ( ! str_contains( $key, '**' ) ) {
-						$role = $key;
-					} else {
-						$key_arr = explode( '**', $key );
-						$role    = ! empty( $key_arr[1] ) ? $key_arr[1] : 'all';
-					}
-				}
 
 				// check role
 				if ( in_array( $role, $roles ) || $role === 'all' || $role === 'wpcpq_all' || ( $role === 'wpcpq_user' && is_user_logged_in() ) || ( $role === 'wpcpq_guest' && ! is_user_logged_in() ) ) {

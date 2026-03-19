@@ -3,7 +3,7 @@
 Plugin Name: WPC Price by Quantity for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: Offering quantity-based prices would be one of the most effective and powerful methods to urge buyers with very few convincing actions needed.
-Version: 5.3.8
+Version: 5.3.9
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: wpc-price-by-quantity
@@ -12,12 +12,12 @@ Requires Plugins: woocommerce
 Requires at least: 4.0
 Tested up to: 6.9
 WC requires at least: 3.0
-WC tested up to: 10.5
+WC tested up to: 10.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.3.8' );
+! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.3.9' );
 ! defined( 'WPCPQ_LITE' ) && define( 'WPCPQ_LITE', __FILE__ );
 ! defined( 'WPCPQ_FILE' ) && define( 'WPCPQ_FILE', __FILE__ );
 ! defined( 'WPCPQ_URI' ) && define( 'WPCPQ_URI', plugin_dir_url( __FILE__ ) );
@@ -28,6 +28,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 ! defined( 'WPCPQ_DISCUSSION' ) && define( 'WPCPQ_DISCUSSION', 'https://wordpress.org/support/plugin/wpc-price-by-quantity' );
 ! defined( 'WPC_URI' ) && define( 'WPC_URI', WPCPQ_URI );
 
+include 'includes/log/wpc-log.php';
 include 'includes/dashboard/wpc-dashboard.php';
 include 'includes/kit/wpc-kit.php';
 include 'includes/hpos.php';

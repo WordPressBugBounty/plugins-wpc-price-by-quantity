@@ -19,6 +19,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 
             // Settings
             add_action( 'admin_init', [ $this, 'register_settings' ] );
+            add_filter( 'pre_update_option', [ $this, 'last_saved' ], 10, 2 );
             add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 
             // Links
@@ -220,6 +221,15 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                     'type'              => 'array',
                     'sanitize_callback' => [ 'Wpcpq_Helper', 'sanitize_array' ],
             ] );
+        }
+
+        function last_saved( $value, $option ) {
+            if ( $option == 'wpcpq_settings' || $option == 'wpcpq_localization' ) {
+                $value['_last_saved']    = current_time( 'timestamp' );
+                $value['_last_saved_by'] = get_current_user_id();
+            }
+
+            return $value;
         }
 
         public function admin_menu() {
@@ -441,7 +451,16 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                 </tr>
                                 <tr class="submit">
                                     <th colspan="2">
-                                        <?php settings_fields( 'wpcpq_settings' ); ?><?php submit_button(); ?>
+                                        <div class="wpclever_submit">
+                                            <?php
+                                            settings_fields( 'wpcpq_settings' );
+                                            submit_button( '', 'primary', 'submit', false );
+
+                                            if ( function_exists( 'wpc_last_saved' ) ) {
+                                                wpc_last_saved( Wpcpq_Helper()::get_settings() );
+                                            }
+                                            ?>
+                                        </div>
                                         <a style="display: none;" class="wpclever_export"
                                            data-key="wpcpq_settings"
                                            data-name="settings"
@@ -584,7 +603,16 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                                 </tr>
                                 <tr class="submit">
                                     <th colspan="2">
-                                        <?php settings_fields( 'wpcpq_localization' ); ?><?php submit_button(); ?>
+                                        <div class="wpclever_submit">
+                                            <?php
+                                            settings_fields( 'wpcpq_localization' );
+                                            submit_button( '', 'primary', 'submit', false );
+
+                                            if ( function_exists( 'wpc_last_saved' ) ) {
+                                                wpc_last_saved( get_option( 'wpcpq_localization', [] ) );
+                                            }
+                                            ?>
+                                        </div>
                                         <a style="display: none;" class="wpclever_export"
                                            data-key="wpcpq_localization"
                                            data-name="settings"
@@ -664,7 +692,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
             return (array) $links;
         }
 
-        public function ajax_add_role_price() {
+        function ajax_add_role_price() {
             if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'wpcpq-security' ) ) {
                 die( 'Permissions check failed!' );
             }
@@ -688,9 +716,10 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
             $name         = $is_variation ? '_v[' . $product_id . ']' : '';
 
             if ( ! empty( $role ) ) {
-                $key    = $role;
+                $key    = Wpcpq_Helper()::generate_key();
                 $active = true;
                 $price  = [
+                        'role'      => $role,
                         'apply'     => $apply,
                         'apply_val' => $apply_val,
                         'method'    => $method,

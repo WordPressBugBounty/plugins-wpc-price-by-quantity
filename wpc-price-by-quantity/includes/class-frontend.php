@@ -197,8 +197,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                         </div>
                         <div class="wpcpq-item-price">
                             <?php
-                            $tier_price = wc_get_price_to_display( $product, [ 'price' => $product_price ] );
-                            echo wp_kses_post( apply_filters( 'wpcpq_item_price_default', apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price, 'default' ) . '</span>', [], $product, $tier_price ), $tiers, $product, $tier_price ) );
+                            echo wp_kses_post( apply_filters( 'wpcpq_item_price_default', apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $product_price, 'default' ) . '</span>', [], $product, $product_price ), $tiers, $product, $product_price ) );
                             ?>
                         </div>
                         <?php
@@ -276,7 +275,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                         echo '</div><!-- /.wpcpq-item-qty -->';
 
                         // item price
-                        $tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::calculate_price( $item_price, $product_price ), ] );
+                        $tier_price = Wpcpq_Helper()::calculate_price( $item_price, $product_price );
                         echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>', $tier, $product, $tier_price ) );
 
                         // item text
@@ -356,7 +355,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                             </div>
                             <?php
                             // item price
-                            $tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::calculate_price( $item_price, $product_price ), ] );
+                            $tier_price = Wpcpq_Helper()::calculate_price( $item_price, $product_price );
                             echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', sprintf( Wpcpq_Helper()::localization( 'qb_item_price', /* translators: price */ esc_html__( '%s for each product', 'wpc-price-by-quantity' ) ), '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>' ), $tier, $product, $tier_price ) ) . '</div>';
 
                             // item text
@@ -403,8 +402,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                         </div>
                         <div class="wpcpq-item-price">
                             <?php
-                            $tier_price = wc_get_price_to_display( $product, [ 'price' => $product_price ] );
-                            echo wp_kses_post( apply_filters( 'wpcpq_item_price_default', apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>', [], $product, $tier_price ), $tiers, $product, $tier_price ) );
+                            echo wp_kses_post( apply_filters( 'wpcpq_item_price_default', apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $product_price ) . '</span>', [], $product, $product_price ), $tiers, $product, $product_price ) );
                             ?>
                         </div>
                         <?php
@@ -483,7 +481,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                         </div>
                         <?php
                         // item price
-                        $tier_price = wc_get_price_to_display( $product, [ 'price' => Wpcpq_Helper()::calculate_price( $item_price, $product_price ), ] );
+                        $tier_price = Wpcpq_Helper()::calculate_price( $item_price, $product_price );
                         echo '<div class="wpcpq-item-price">' . wp_kses_post( apply_filters( 'wpcpq_item_price', '<span class="wpcpq-item-price-val">' . Wpcpq_Helper()::display_price( $tier_price ) . '</span>', $tier, $product, $tier_price ) );
 
                         // item text

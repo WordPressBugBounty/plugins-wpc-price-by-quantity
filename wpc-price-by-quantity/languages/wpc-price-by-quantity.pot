@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.3.8\n"
+"Project-Id-Version: WPC Price by Quantity for WooCommerce 5.3.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-price-by-quantity\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-03T03:12:16+00:00\n"
+"POT-Creation-Date: 2026-03-19T14:08:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wpc-price-by-quantity\n"
@@ -39,437 +39,437 @@ msgstr ""
 msgid "https://wpclever.net"
 msgstr ""
 
-#: includes/class-backend.php:67
-#: includes/class-backend.php:139
-#: includes/class-backend.php:754
+#: includes/class-backend.php:68
+#: includes/class-backend.php:140
+#: includes/class-backend.php:783
 msgid "Price by Quantity"
 msgstr ""
 
-#: includes/class-backend.php:90
+#: includes/class-backend.php:91
 msgid "Product wasn't returned."
 msgstr ""
 
-#: includes/class-backend.php:103
-#: includes/class-backend.php:240
+#: includes/class-backend.php:104
+#: includes/class-backend.php:250
 msgid "WPC Price by Quantity"
 msgstr ""
 
-#: includes/class-backend.php:141
+#: includes/class-backend.php:142
 msgid "Global"
 msgstr ""
 
-#: includes/class-backend.php:142
-#: includes/class-backend.php:768
+#: includes/class-backend.php:143
+#: includes/class-backend.php:797
 msgid "Disable"
 msgstr ""
 
-#: includes/class-backend.php:144
+#: includes/class-backend.php:145
 msgid "Parent"
 msgstr ""
 
-#: includes/class-backend.php:146
-#: includes/class-backend.php:772
+#: includes/class-backend.php:147
+#: includes/class-backend.php:801
 msgid "Override"
 msgstr ""
 
-#: includes/class-backend.php:240
+#: includes/class-backend.php:250
 msgid "Premium"
 msgstr ""
 
 #. translators: stars
-#: includes/class-backend.php:243
+#: includes/class-backend.php:253
 #, php-format
 msgid "Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating."
 msgstr ""
 
-#: includes/class-backend.php:246
+#: includes/class-backend.php:256
 msgid "Reviews"
 msgstr ""
 
-#: includes/class-backend.php:248
+#: includes/class-backend.php:258
 msgid "Changelog"
 msgstr ""
 
-#: includes/class-backend.php:250
+#: includes/class-backend.php:260
 msgid "Discussion"
 msgstr ""
 
-#: includes/class-backend.php:258
+#: includes/class-backend.php:268
 msgid "Settings updated."
 msgstr ""
 
-#: includes/class-backend.php:265
-#: includes/class-backend.php:641
+#: includes/class-backend.php:275
+#: includes/class-backend.php:669
 msgid "Settings"
 msgstr ""
 
-#: includes/class-backend.php:269
+#: includes/class-backend.php:279
 msgid "Localization"
 msgstr ""
 
-#: includes/class-backend.php:274
-#: includes/class-backend.php:642
+#: includes/class-backend.php:284
+#: includes/class-backend.php:670
 msgid "Premium Version"
 msgstr ""
 
-#: includes/class-backend.php:277
+#: includes/class-backend.php:287
 msgid "Essential Kit"
 msgstr ""
 
-#: includes/class-backend.php:295
+#: includes/class-backend.php:305
 msgid "Position"
 msgstr ""
 
-#: includes/class-backend.php:298
+#: includes/class-backend.php:308
 msgid "Above the add to cart button"
 msgstr ""
 
-#: includes/class-backend.php:299
+#: includes/class-backend.php:309
 msgid "Under the add to cart button"
 msgstr ""
 
-#: includes/class-backend.php:300
+#: includes/class-backend.php:310
 msgid "Under the title"
 msgstr ""
 
-#: includes/class-backend.php:301
+#: includes/class-backend.php:311
 msgid "Under the price"
 msgstr ""
 
-#: includes/class-backend.php:302
+#: includes/class-backend.php:312
 msgid "Under the excerpt"
 msgstr ""
 
-#: includes/class-backend.php:303
+#: includes/class-backend.php:313
 msgid "Under the meta"
 msgstr ""
 
-#: includes/class-backend.php:304
+#: includes/class-backend.php:314
 msgid "Under the summary"
 msgstr ""
 
-#: includes/class-backend.php:305
+#: includes/class-backend.php:315
 msgid "None (hide it)"
 msgstr ""
 
 #. translators: shortcode
-#: includes/class-backend.php:307
+#: includes/class-backend.php:317
 #, php-format
 msgid "Choose where to display the pricing table on a single product page; use %s shortcode to place it anywhere."
 msgstr ""
 
-#: includes/class-backend.php:311
+#: includes/class-backend.php:321
 msgid "Hide on low-stock products"
 msgstr ""
 
-#: includes/class-backend.php:314
-#: includes/class-backend.php:335
-#: includes/class-backend.php:367
+#: includes/class-backend.php:324
+#: includes/class-backend.php:345
+#: includes/class-backend.php:377
 msgid "Yes"
 msgstr ""
 
-#: includes/class-backend.php:315
-#: includes/class-backend.php:326
+#: includes/class-backend.php:325
 #: includes/class-backend.php:336
-#: includes/class-backend.php:368
+#: includes/class-backend.php:346
+#: includes/class-backend.php:378
 msgid "No"
 msgstr ""
 
-#: includes/class-backend.php:317
+#: includes/class-backend.php:327
 msgid "Hide the pricing table for products with inventory quantities lower than the minimum quantity specified in the pricing options."
 msgstr ""
 
-#: includes/class-backend.php:321
+#: includes/class-backend.php:331
 msgid "Change price"
 msgstr ""
 
-#: includes/class-backend.php:324
+#: includes/class-backend.php:334
 msgid "Replace by active price"
 msgstr ""
 
-#: includes/class-backend.php:325
+#: includes/class-backend.php:335
 msgid "Replace by total"
 msgstr ""
 
-#: includes/class-backend.php:328
+#: includes/class-backend.php:338
 msgid "Change the main price when updating the quantity."
 msgstr ""
 
-#: includes/class-backend.php:332
+#: includes/class-backend.php:342
 msgid "Click to set"
 msgstr ""
 
-#: includes/class-backend.php:338
+#: includes/class-backend.php:348
 msgid "Change the main quantity when clicking on a pricing row."
 msgstr ""
 
-#: includes/class-backend.php:342
+#: includes/class-backend.php:352
 msgid "Active color"
 msgstr ""
 
 #. translators: color
-#: includes/class-backend.php:349
+#: includes/class-backend.php:359
 #, php-format
 msgid "Choose the color for the active price, default %s"
 msgstr ""
 
-#: includes/class-backend.php:353
+#: includes/class-backend.php:363
 msgid "Active background color"
 msgstr ""
 
 #. translators: color
-#: includes/class-backend.php:360
+#: includes/class-backend.php:370
 #, php-format
 msgid "Choose the background color for the active price, default %s"
 msgstr ""
 
-#: includes/class-backend.php:364
+#: includes/class-backend.php:374
 msgid "Hide first row"
 msgstr ""
 
-#: includes/class-backend.php:370
+#: includes/class-backend.php:380
 msgid "Hide the first row that show the original price."
 msgstr ""
 
-#: includes/class-backend.php:374
+#: includes/class-backend.php:384
 msgid "After text"
 msgstr ""
 
-#: includes/class-backend.php:377
+#: includes/class-backend.php:387
 msgid "Show"
 msgstr ""
 
-#: includes/class-backend.php:378
+#: includes/class-backend.php:388
 msgid "Hide"
 msgstr ""
 
-#: includes/class-backend.php:380
+#: includes/class-backend.php:390
 msgid "Show/hide the after text on each price row."
 msgstr ""
 
-#: includes/class-backend.php:384
+#: includes/class-backend.php:394
 msgid "Default after text"
 msgstr ""
 
-#: includes/class-backend.php:390
+#: includes/class-backend.php:400
 msgid "You can use [p] for percentage discount, [a] for amount discount. E.g: (saved [p])"
 msgstr ""
 
-#: includes/class-backend.php:395
+#: includes/class-backend.php:405
 msgid "Pricing table"
 msgstr ""
 
-#: includes/class-backend.php:399
-#: includes/class-backend.php:448
-#: includes/class-backend.php:591
+#: includes/class-backend.php:409
+#: includes/class-backend.php:467
+#: includes/class-backend.php:619
 msgid "import / export"
 msgstr ""
 
-#: includes/class-backend.php:457
-#: includes/templates/role-price.php:117
+#: includes/class-backend.php:476
+#: includes/templates/role-price.php:112
 msgid "Default Table"
 msgstr ""
 
-#: includes/class-backend.php:459
-#: includes/class-backend.php:537
+#: includes/class-backend.php:478
+#: includes/class-backend.php:556
 msgid "Leave blank to use the default text and its equivalent translation in multiple languages."
 msgstr ""
 
-#: includes/class-backend.php:463
-#: includes/class-backend.php:468
-#: includes/class-backend.php:746
-#: includes/class-frontend.php:381
-#: includes/templates/role-price.php:139
+#: includes/class-backend.php:482
+#: includes/class-backend.php:487
+#: includes/class-backend.php:775
+#: includes/class-frontend.php:380
+#: includes/templates/role-price.php:134
 msgid "Quantity"
 msgstr ""
 
-#: includes/class-backend.php:473
-#: includes/class-backend.php:478
-#: includes/class-backend.php:747
-#: includes/class-backend.php:830
-#: includes/class-frontend.php:382
-#: includes/templates/role-price.php:146
+#: includes/class-backend.php:492
+#: includes/class-backend.php:497
+#: includes/class-backend.php:776
+#: includes/class-backend.php:859
+#: includes/class-frontend.php:381
+#: includes/templates/role-price.php:141
 msgid "Price"
 msgstr ""
 
-#: includes/class-backend.php:483
-#: includes/class-backend.php:488
-#: includes/class-frontend.php:384
+#: includes/class-backend.php:502
+#: includes/class-backend.php:507
+#: includes/class-frontend.php:383
 msgid "Tier Total"
 msgstr ""
 
-#: includes/class-backend.php:493
+#: includes/class-backend.php:512
 msgid "Min outliers"
 msgstr ""
 
-#: includes/class-backend.php:498
+#: includes/class-backend.php:517
 #: includes/class-frontend.php:190
-#: includes/class-frontend.php:396
+#: includes/class-frontend.php:395
 msgid "<{min}"
 msgstr ""
 
-#: includes/class-backend.php:500
+#: includes/class-backend.php:519
 msgid "Values smaller than min."
 msgstr ""
 
-#: includes/class-backend.php:504
+#: includes/class-backend.php:523
 msgid "Single value"
 msgstr ""
 
-#: includes/class-backend.php:509
-#: includes/class-frontend.php:267
-#: includes/class-frontend.php:474
+#: includes/class-backend.php:528
+#: includes/class-frontend.php:266
+#: includes/class-frontend.php:472
 msgid "{single}"
 msgstr ""
 
-#: includes/class-backend.php:514
+#: includes/class-backend.php:533
 msgid "Values between min and max"
 msgstr ""
 
-#: includes/class-backend.php:519
-#: includes/class-frontend.php:258
-#: includes/class-frontend.php:465
+#: includes/class-backend.php:538
+#: includes/class-frontend.php:257
+#: includes/class-frontend.php:463
 msgid "{from} - {to}"
 msgstr ""
 
-#: includes/class-backend.php:524
+#: includes/class-backend.php:543
 msgid "Max & outliers"
 msgstr ""
 
-#: includes/class-backend.php:529
-#: includes/class-frontend.php:246
-#: includes/class-frontend.php:453
+#: includes/class-backend.php:548
+#: includes/class-frontend.php:245
+#: includes/class-frontend.php:451
 msgid "{max}+"
 msgstr ""
 
-#: includes/class-backend.php:531
+#: includes/class-backend.php:550
 msgid "Max quantity and larger values."
 msgstr ""
 
-#: includes/class-backend.php:535
-#: includes/templates/role-price.php:118
+#: includes/class-backend.php:554
+#: includes/templates/role-price.php:113
 msgid "Quick Buy Table"
 msgstr ""
 
-#: includes/class-backend.php:541
+#: includes/class-backend.php:560
 msgid "Item quantity (singular)"
 msgstr ""
 
 #. translators: qty
-#: includes/class-backend.php:548
-#: includes/class-frontend.php:353
+#: includes/class-backend.php:567
+#: includes/class-frontend.php:352
 #, php-format
 msgid "%s item"
 msgstr ""
 
-#: includes/class-backend.php:552
+#: includes/class-backend.php:571
 msgid "Item quantity (plural)"
 msgstr ""
 
 #. translators: qty
-#: includes/class-backend.php:559
-#: includes/class-frontend.php:353
+#: includes/class-backend.php:578
+#: includes/class-frontend.php:352
 #, php-format
 msgid "%s items"
 msgstr ""
 
-#: includes/class-backend.php:563
+#: includes/class-backend.php:582
 msgid "Item price"
 msgstr ""
 
 #. translators: price
-#: includes/class-backend.php:570
-#: includes/class-frontend.php:360
+#: includes/class-backend.php:589
+#: includes/class-frontend.php:359
 #, php-format
 msgid "%s for each product"
 msgstr ""
 
-#: includes/class-backend.php:575
-#: includes/class-backend.php:581
-#: includes/class-frontend.php:372
+#: includes/class-backend.php:594
+#: includes/class-backend.php:600
+#: includes/class-frontend.php:371
 msgid "Add to cart"
 msgstr ""
 
-#: includes/class-backend.php:658
+#: includes/class-backend.php:686
 msgid "Community support"
 msgstr ""
 
-#: includes/class-backend.php:748
-#: includes/templates/role-price.php:152
+#: includes/class-backend.php:777
+#: includes/templates/role-price.php:147
 msgid "Leave empty to use the default text."
 msgstr ""
 
-#: includes/class-backend.php:749
-#: includes/templates/role-price.php:53
-#: includes/templates/role-price.php:158
+#: includes/class-backend.php:778
+#: includes/templates/role-price.php:48
+#: includes/templates/role-price.php:153
 msgid "remove"
 msgstr ""
 
-#: includes/class-backend.php:791
+#: includes/class-backend.php:820
 msgid "Product price:"
 msgstr ""
 
-#: includes/class-backend.php:812
+#: includes/class-backend.php:841
 #: includes/templates/add-new.php:12
-#: includes/templates/role-price.php:26
-#: includes/templates/role-price.php:38
+#: includes/templates/role-price.php:20
+#: includes/templates/role-price.php:32
 msgid "All"
 msgstr ""
 
-#: includes/class-backend.php:815
+#: includes/class-backend.php:844
 msgid "User role:"
 msgstr ""
 
-#: includes/class-backend.php:819
-#: includes/class-backend.php:821
+#: includes/class-backend.php:848
+#: includes/class-backend.php:850
 msgid "Apply for:"
 msgstr ""
 
-#: includes/class-backend.php:819
+#: includes/class-backend.php:848
 msgid "all products"
 msgstr ""
 
-#: includes/class-backend.php:825
+#: includes/class-backend.php:854
 msgid "Pricing method:"
 msgstr ""
 
-#: includes/class-backend.php:826
+#: includes/class-backend.php:855
 msgid "Layout:"
 msgstr ""
 
-#: includes/class-backend.php:829
-#: includes/class-backend.php:845
-#: includes/templates/role-price.php:125
+#: includes/class-backend.php:858
+#: includes/class-backend.php:874
+#: includes/templates/role-price.php:120
 msgid "Quantity-based pricing options"
 msgstr ""
 
-#: includes/class-backend.php:830
+#: includes/class-backend.php:859
 msgid "Qty"
 msgstr ""
 
-#: includes/class-backend.php:830
+#: includes/class-backend.php:859
 msgid "Text"
 msgstr ""
 
-#: includes/class-backend.php:845
+#: includes/class-backend.php:874
 msgid "Not set"
 msgstr ""
 
-#: includes/class-frontend.php:558
+#: includes/class-frontend.php:556
 msgid "Before price table"
 msgstr ""
 
-#: includes/class-frontend.php:559
+#: includes/class-frontend.php:557
 msgid "After price table"
 msgstr ""
 
 #: includes/templates/add-new.php:13
-#: includes/templates/role-price.php:30
+#: includes/templates/role-price.php:24
 msgid "User (logged in)"
 msgstr ""
 
 #: includes/templates/add-new.php:14
-#: includes/templates/role-price.php:34
+#: includes/templates/role-price.php:28
 msgid "Guest (not logged in)"
 msgstr ""
 
@@ -477,62 +477,62 @@ msgstr ""
 msgid "+ Setup for role"
 msgstr ""
 
-#: includes/templates/role-price.php:49
+#: includes/templates/role-price.php:44
 msgid "move"
 msgstr ""
 
-#: includes/templates/role-price.php:52
+#: includes/templates/role-price.php:47
 msgid "duplicate"
 msgstr ""
 
-#: includes/templates/role-price.php:57
+#: includes/templates/role-price.php:52
 msgid "Apply for"
 msgstr ""
 
-#: includes/templates/role-price.php:63
+#: includes/templates/role-price.php:58
 msgid "All products"
 msgstr ""
 
-#: includes/templates/role-price.php:65
+#: includes/templates/role-price.php:60
 msgid "Selected products (Premium)"
 msgstr ""
 
-#: includes/templates/role-price.php:73
+#: includes/templates/role-price.php:68
 msgid "Exclude on-sale products"
 msgstr ""
 
-#: includes/templates/role-price.php:98
+#: includes/templates/role-price.php:93
 msgid "Pricing method"
 msgstr ""
 
-#: includes/templates/role-price.php:101
+#: includes/templates/role-price.php:96
 msgid "Volume pricing: One unit price only that is corresponding to the quantity level will be applied. &#10; Tiered pricing: Multiple unit prices will be applied when the selected quantity covers over the tiers."
 msgstr ""
 
-#: includes/templates/role-price.php:104
+#: includes/templates/role-price.php:99
 msgid "Volume pricing"
 msgstr ""
 
-#: includes/templates/role-price.php:105
+#: includes/templates/role-price.php:100
 msgid "Tiered pricing"
 msgstr ""
 
-#: includes/templates/role-price.php:111
+#: includes/templates/role-price.php:106
 msgid "Layout"
 msgstr ""
 
-#: includes/templates/role-price.php:114
+#: includes/templates/role-price.php:109
 msgid "Choose the layout for the pricing table on a single product page."
 msgstr ""
 
-#: includes/templates/role-price.php:119
+#: includes/templates/role-price.php:114
 msgid "Compact"
 msgstr ""
 
-#: includes/templates/role-price.php:127
+#: includes/templates/role-price.php:122
 msgid "Set the price in numbers and the following characters: + / - / %. &#10; For example: &#10; +2: Increase the product price by 2 &#10; -5: Decrease the product price by 5 &#10; 10: Set the new product price as 10 &#10; 90%: Set the new product price as 90% of the original price."
 msgstr ""
 
-#: includes/templates/role-price.php:168
+#: includes/templates/role-price.php:163
 msgid "+ New row"
 msgstr ""
