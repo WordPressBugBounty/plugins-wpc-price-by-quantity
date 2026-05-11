@@ -3,8 +3,8 @@ Contributors: wpclever
 Donate link: https://wpclever.net
 Tags: woocommerce, wpc, quantity, tiered pricing, volume pricing
 Tested up to: 6.9
-Version: 5.3.9
-Stable tag: 5.3.9
+Version: 5.4.0
+Stable tag: 5.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,9 @@ Please try other plugins from us:
 5. When adding/editing the product you can choose the Price by Quantity tab then add price tiers as you want
 
 == Changelog ==
+
+= 5.4.0 =
+* Updated: Optimized the code for better performance
 
 = 5.3.9 =
 * Fixed: Minor CSS/JS issues in the backend
