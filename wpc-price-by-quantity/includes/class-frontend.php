@@ -74,7 +74,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
             $inline_css      = '.wpcpq-table .wpcpq-item-active {color: ' . $color . '; background-color: ' . $bgcolor . '}';
 
             // frontend css
-            wp_enqueue_style( 'wpcpq-frontend', WPCPQ_URI . 'assets/css/frontend.css' );
+            wp_enqueue_style( 'wpcpq-frontend', WPCPQ_URI . 'assets/css/frontend.css', [], WPCPQ_VERSION );
             wp_add_inline_style( 'wpcpq-frontend', $inline_css );
 
             // frontend js
@@ -147,7 +147,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
 
             ob_start();
             $wrap_attrs = apply_filters( 'wpcpq_wrap_data_attributes', [ 'id' => $wrap_id ], $product );
-            echo '<div class="' . esc_attr( 'wpcpq-wrap wpcpq-wrap-' . $wrap_id ) . '" ' . Wpcpq_Helper()::data_attributes( $wrap_attrs ) . '>';
+            echo wp_kses_post( '<div class="' . esc_attr( 'wpcpq-wrap wpcpq-wrap-' . $wrap_id ) . '" ' . Wpcpq_Helper()::data_attributes( $wrap_attrs ) . '>' );
             // always render the wrapper to use it for variable product
 
             $roles   = Wpcpq_Helper()::get_current_roles();
@@ -172,7 +172,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                         'price'   => $product_price,
                         'o_price' => $product_price
                 ], $product );
-                echo '<div class="' . esc_attr( apply_filters( 'wpcpq_table_class', $table_class ) ) . '" ' . Wpcpq_Helper()::data_attributes( $table_attrs ) . '>';
+                echo wp_kses_post( '<div class="' . esc_attr( apply_filters( 'wpcpq_table_class', $table_class ) ) . '" ' . Wpcpq_Helper()::data_attributes( $table_attrs ) . '>' );
 
                 do_action( 'wpcpq_table_before', $product );
 
@@ -231,7 +231,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                                 'next-qty' => isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1'
                         ], $key, $tiers, $item_context );
 
-                        echo '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>';
+                        echo wp_kses_post( '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>' );
 
                         do_action( 'wpcpq_item_before', $key, $tiers, $item_context );
 
@@ -342,7 +342,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                                 'next-qty' => isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1'
                         ], $key, $tiers, $item_context );
 
-                        echo '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>';
+                        echo wp_kses_post( '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>' );
 
                         do_action( 'wpcpq_item_before', $key, $tiers, $item_context );
                         ?>
@@ -377,10 +377,10 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                     }
                 } else { ?>
                     <div class="wpcpq-row wpcpq-head">
-                        <div class="wpcpq-row-qty"><?php echo Wpcpq_Helper()::localization( 'quantity', esc_html__( 'Quantity', 'wpc-price-by-quantity' ) ); ?></div>
-                        <div class="wpcpq-row-price"><?php echo Wpcpq_Helper()::localization( 'price', esc_html__( 'Price', 'wpc-price-by-quantity' ) ); ?></div>
+                        <div class="wpcpq-row-qty"><?php echo esc_html( Wpcpq_Helper()::localization( 'quantity', esc_html__( 'Quantity', 'wpc-price-by-quantity' ) ) ); ?></div>
+                        <div class="wpcpq-row-price"><?php echo esc_html( Wpcpq_Helper()::localization( 'price', esc_html__( 'Price', 'wpc-price-by-quantity' ) ) ); ?></div>
                         <?php if ( $method === 'tiered' ) {
-                            echo '<div class="wpcpq-row-total">' . Wpcpq_Helper()::localization( 'row_total', esc_html__( 'Tier Total', 'wpc-price-by-quantity' ) ) . '</div>';
+                            echo '<div class="wpcpq-row-total">' . esc_html( Wpcpq_Helper()::localization( 'row_total', esc_html__( 'Tier Total', 'wpc-price-by-quantity' ) ) ) . '</div>';
                         } ?>
                     </div>
                     <div class="wpcpq-row wpcpq-item wpcpq-item-0 wpcpq-item-min wpcpq-item-default"
@@ -437,7 +437,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                                 'next-qty' => isset( $tiers[ $key + 1 ] ) ? $tiers[ $key + 1 ]['quantity'] : '-1'
                         ], $key, $tiers, $item_context );
 
-                        echo '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>';
+                        echo wp_kses_post( '<div class="' . esc_attr( apply_filters( 'wpcpq_item_class', $item_class, $key, $tiers, $item_context ) ) . '" ' . Wpcpq_Helper()::data_attributes( $item_attrs ) . '>' );
 
                         do_action( 'wpcpq_item_before', $key, $tiers, $item_context );
                         ?>
@@ -548,7 +548,7 @@ if ( ! class_exists( 'Wpcpq_Frontend' ) ) {
                 return;
             }
 
-            echo self::get_table( $product );
+            echo wp_kses_post( self::get_table( $product ) );
         }
 
         function wpcsm_locations( $locations ) {

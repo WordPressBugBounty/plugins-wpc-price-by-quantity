@@ -14,7 +14,6 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
         }
 
         public function __construct() {
-            add_action( 'init', [ $this, 'init' ] );
             add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
             // Settings
@@ -58,11 +57,6 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
             // Import
             add_filter( 'woocommerce_product_import_pre_insert_product_object', [ $this, 'import_process' ], 10, 2 );
         }
-
-        public function init() {
-            load_plugin_textdomain( 'wpc-price-by-quantity', false, basename( WPCPQ_DIR ) . '/languages/' );
-        }
-
         public function product_data_tabs( $tabs ) {
             $tabs['wpcpq'] = [
                     'label'  => esc_html__( 'Price by Quantity', 'wpc-price-by-quantity' ),
@@ -263,7 +257,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                     </div>
                 </div>
                 <h2></h2>
-                <?php if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) { ?>
+                <?php if ( isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) ) { ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php esc_html_e( 'Settings updated.', 'wpc-price-by-quantity' ); ?></p>
                     </div>
@@ -697,21 +691,17 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                 die( 'Permissions check failed!' );
             }
 
-            $role      = sanitize_text_field( $_POST['role'] ?? 'all' );
-            $apply     = sanitize_text_field( $_POST['apply'] ?? 'all' );
-            $apply_val = sanitize_text_field( $_POST['apply_val'] ?? '' );
-            $method    = sanitize_text_field( $_POST['method'] ?? 'volume' );
-            $layout    = sanitize_text_field( $_POST['layout'] ?? 'default' );
-            $tiers     = Wpcpq_Helper()::sanitize_array( $_POST['tiers'] ?? [
-                    [
-                            'quantity' => '',
-                            'price'    => '',
-                            'text'     => '',
-                    ]
-            ] );
+            $role      = sanitize_text_field( wp_unslash( $_POST['role'] ?? 'all' ) );
+            $apply     = sanitize_text_field( wp_unslash( $_POST['apply'] ?? 'all' ) );
+            $apply_val = sanitize_text_field( wp_unslash( $_POST['apply_val'] ?? '' ) );
+            $method    = sanitize_text_field( wp_unslash( $_POST['method'] ?? 'volume' ) );
+            $layout    = sanitize_text_field( wp_unslash( $_POST['layout'] ?? 'default' ) );
+            $tiers     = isset( $_POST['tiers'] )
+                ? map_deep( wp_unslash( $_POST['tiers'] ), 'sanitize_text_field' )
+                : [ [ 'quantity' => '', 'price' => '', 'text' => '' ] ];
 
             // variation id > 0
-            $product_id   = absint( sanitize_text_field( $_POST['id'] ?? 0 ) );
+            $product_id   = absint( sanitize_text_field( wp_unslash( $_POST['id'] ?? 0 ) ) );
             $is_variation = $product_id > 0;
             $name         = $is_variation ? '_v[' . $product_id . ']' : '';
 
@@ -739,12 +729,12 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
 
             $return = [];
             $args   = [
-                    'taxonomy'   => sanitize_text_field( $_REQUEST['taxonomy'] ),
+                    'taxonomy'   => sanitize_text_field( wp_unslash( $_REQUEST['taxonomy'] ?? '' ) ),
                     'orderby'    => 'id',
                     'order'      => 'ASC',
                     'hide_empty' => false,
                     'fields'     => 'all',
-                    'name__like' => sanitize_text_field( $_REQUEST['q'] ),
+                    'name__like' => sanitize_text_field( wp_unslash( $_REQUEST['q'] ?? '' ) ),
             ];
 
             $terms = get_terms( $args );
@@ -759,7 +749,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
         }
 
         public function enqueue_scripts() {
-            wp_enqueue_style( 'hint', WPCPQ_URI . 'assets/css/hint.css' );
+            wp_enqueue_style( 'hint', WPCPQ_URI . 'assets/css/hint.css', [], WPCPQ_VERSION );
             wp_enqueue_style( 'wp-color-picker' );
             wp_enqueue_style( 'wpcpq-backend', WPCPQ_URI . 'assets/css/backend.css', [ 'woocommerce_admin_styles' ], WPCPQ_VERSION );
             wp_enqueue_script( 'wpcpq-backend', WPCPQ_URI . 'assets/js/backend.js', [
@@ -808,8 +798,8 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                 die( 'Permissions check failed!' );
             }
 
-            $pid     = absint( sanitize_text_field( $_POST['pid'] ) );
-            $type    = sanitize_text_field( $_POST['type'] );
+            $pid     = absint( sanitize_text_field( wp_unslash( $_POST['pid'] ?? 0 ) ) );
+            $type    = sanitize_text_field( wp_unslash( $_POST['type'] ?? '' ) );
             $product = wc_get_product( $pid );
 
             if ( $product ) {
@@ -817,7 +807,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                 $prices = [];
 
                 echo '<div class="wpcpq-overview-content">';
-                echo '<div class="wpcpq-overview-line">' . esc_html__( 'Product price:', 'wpc-price-by-quantity' ) . ' ' . $product->get_price_html() . '</div>';
+                echo wp_kses_post( '<div class="wpcpq-overview-line">' . esc_html__( 'Product price:', 'wpc-price-by-quantity' ) . ' ' . $product->get_price_html() . '</div>' );
 
                 if ( $type === 'global' ) {
                     $prices = Wpcpq_Helper()::get_prices();
