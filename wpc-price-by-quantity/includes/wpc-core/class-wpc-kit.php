@@ -49,11 +49,11 @@ if ( ! class_exists( 'WPCleverKit' ) ) {
             }
 
             if ( isset( $_GET['action'], $_GET['plugin'], $_GET['_wpnonce'] ) && ( $_GET['action'] === 'activate' ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'activate-plugin_' . sanitize_text_field( wp_unslash( $_GET['plugin'] ) ) ) ) {
-                activate_plugin( sanitize_text_field( wp_unslash( $_GET['plugin'] ) ), '', false, true );
+                activate_plugin( sanitize_text_field( wp_unslash( $_GET['plugin'] ?? '' ) ), '', false, true );
             }
 
             if ( isset( $_GET['action'], $_GET['plugin'], $_GET['_wpnonce'] ) && ( $_GET['action'] === 'deactivate' ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'deactivate-plugin_' . sanitize_text_field( wp_unslash( $_GET['plugin'] ) ) ) ) {
-                deactivate_plugins( sanitize_text_field( wp_unslash( $_GET['plugin'] ) ), '', false, true );
+                deactivate_plugins( sanitize_text_field( wp_unslash( $_GET['plugin'] ?? '' ) ) );
             }
             ?>
             <div class="wpclever_page wrap">
@@ -77,7 +77,7 @@ if ( ! class_exists( 'WPCleverKit' ) ) {
         }
 
         function ajax_get_essential_kit() {
-            if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_key( $_POST['security'] ), 'wpc_kit' ) ) {
+            if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['security'] ) ), 'wpc_kit' ) ) {
                 die( 'Permissions check failed!' );
             }
 
@@ -104,25 +104,33 @@ if ( ! class_exists( 'WPCleverKit' ) ) {
                         'request' => serialize( $args )
                 ];
                 //https://codex.wordpress.org/WordPress.org_API
-                $url      = 'http://api.wordpress.org/plugins/info/1.0/';
+                // Use HTTPS to prevent man-in-the-middle attacks on the API request
+                $url      = 'https://api.wordpress.org/plugins/info/1.0/';
                 $response = wp_remote_post( $url, [ 'body' => $request ] );
 
                 if ( ! is_wp_error( $response ) ) {
                     $plugins_arr = [];
-                    $plugins     = unserialize( $response['body'] );
 
-                    if ( isset( $plugins->plugins ) && ( count( $plugins->plugins ) > 0 ) ) {
+                    // Restrict unserialize() to scalar types only to prevent PHP Object Injection
+                    $plugins = unserialize( $response['body'], [ 'allowed_classes' => false ] );
+
+                    // Validate the decoded structure before use
+                    if ( is_object( $plugins ) && isset( $plugins->plugins ) && is_array( $plugins->plugins ) && ( count( $plugins->plugins ) > 0 ) ) {
                         foreach ( $plugins->plugins as $pl ) {
+                            if ( ! is_object( $pl ) ) {
+                                continue;
+                            }
+
                             $plugins_arr[] = [
-                                    'slug'              => $pl->slug,
-                                    'name'              => $pl->name,
-                                    'version'           => $pl->version,
-                                    'downloaded'        => $pl->downloaded,
-                                    'active_installs'   => $pl->active_installs,
-                                    'last_updated'      => strtotime( $pl->last_updated ),
-                                    'rating'            => $pl->rating,
-                                    'num_ratings'       => $pl->num_ratings,
-                                    'short_description' => $pl->short_description,
+                                    'slug'              => isset( $pl->slug ) ? (string) $pl->slug : '',
+                                    'name'              => isset( $pl->name ) ? (string) $pl->name : '',
+                                    'version'           => isset( $pl->version ) ? (string) $pl->version : '',
+                                    'downloaded'        => isset( $pl->downloaded ) ? (int) $pl->downloaded : 0,
+                                    'active_installs'   => isset( $pl->active_installs ) ? (int) $pl->active_installs : 0,
+                                    'last_updated'      => isset( $pl->last_updated ) ? strtotime( (string) $pl->last_updated ) : 0,
+                                    'rating'            => isset( $pl->rating ) ? (float) $pl->rating : 0,
+                                    'num_ratings'       => isset( $pl->num_ratings ) ? (int) $pl->num_ratings : 0,
+                                    'short_description' => isset( $pl->short_description ) ? (string) $pl->short_description : '',
                             ];
                         }
                     }

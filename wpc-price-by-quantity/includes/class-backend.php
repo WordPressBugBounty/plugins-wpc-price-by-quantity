@@ -234,7 +234,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
         }
 
         public function admin_menu_content() {
-            $active_tab = sanitize_key( $_GET['tab'] ?? 'settings' );
+            $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
             ?>
             <div class="wpclever_settings_page wrap">
                 <div class="wpclever_settings_page_header">
@@ -257,7 +257,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
                     </div>
                 </div>
                 <h2></h2>
-                <?php if ( isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) ) { ?>
+                <?php if ( isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ?? '' ) ) ) { ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php esc_html_e( 'Settings updated.', 'wpc-price-by-quantity' ); ?></p>
                     </div>
@@ -687,7 +687,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
         }
 
         function ajax_add_role_price() {
-            if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'wpcpq-security' ) ) {
+            if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['nonce'] ) ), 'wpcpq-security' ) ) {
                 die( 'Permissions check failed!' );
             }
 
@@ -697,7 +697,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
             $method    = sanitize_text_field( wp_unslash( $_POST['method'] ?? 'volume' ) );
             $layout    = sanitize_text_field( wp_unslash( $_POST['layout'] ?? 'default' ) );
             $tiers     = isset( $_POST['tiers'] )
-                ? map_deep( wp_unslash( $_POST['tiers'] ), 'sanitize_text_field' )
+                ? map_deep( wp_unslash( $_POST['tiers'] ?? '' ), 'sanitize_text_field' )
                 : [ [ 'quantity' => '', 'price' => '', 'text' => '' ] ];
 
             // variation id > 0
@@ -723,7 +723,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
         }
 
         function ajax_search_term() {
-            if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['nonce'] ), 'wpcpq-security' ) ) {
+            if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_REQUEST['nonce'] ) ), 'wpcpq-security' ) ) {
                 die( 'Permissions check failed!' );
             }
 
@@ -794,7 +794,7 @@ if ( ! class_exists( 'Wpcpq_Backend' ) ) {
         }
 
         function ajax_overview() {
-            if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'wpcpq-security' ) ) {
+            if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['nonce'] ) ), 'wpcpq-security' ) ) {
                 die( 'Permissions check failed!' );
             }
 
