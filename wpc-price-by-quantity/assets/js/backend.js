@@ -75,6 +75,11 @@
         init_terms();
     });
 
+    $(document).on('woocommerce_variations_added woocommerce_variations_loaded', function () {
+        init_terms();
+        init_sortable();
+    });
+
     $(document).on('click touch', '.wpcpq_overview', function (e) {
         var pid = $(this).attr('data-pid');
         var name = $(this).attr('data-name');
@@ -128,10 +133,202 @@
 
     $(document).on('click touch', '.wpcpq-item-header', function (e) {
         if (($(e.target).closest('.wpcpq-item-duplicate').length === 0) &&
-            ($(e.target).closest('.wpcpq-item-remove').length === 0)) {
+            ($(e.target).closest('.wpcpq-item-remove').length === 0) &&
+            ($(e.target).closest('.wpcpq-item-summary, .wpcpq_summary_btn').length === 0)) {
             $(this).closest('.wpcpq-item').toggleClass('active');
         }
-    }).on('click touch', '.wpcpq-item-remove', function () {
+    });
+
+    // Rule Summary Modal
+    $(document).on('click touch', '.wpcpq-item-summary', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var $item = $(this).closest('.wpcpq-item');
+        var roleName = $item.find('.wpcpq-label-role').text().trim();
+
+        if (!roleName) {
+            var roleVal = $item.find('.wpcpq_role').val();
+            if (roleVal === 'all' || roleVal === 'wpcpq_all') {
+                roleName = 'All';
+            } else if (roleVal === 'wpcpq_user') {
+                roleName = 'User (logged in)';
+            } else if (roleVal === 'wpcpq_guest') {
+                roleName = 'Guest (not logged in)';
+            } else if (roleVal) {
+                var optText = $('.wpcpq-item-new-role option[value="' + roleVal + '"]').text().trim();
+                roleName = optText || roleVal.charAt(0).toUpperCase() + roleVal.slice(1);
+            } else {
+                roleName = 'All';
+            }
+        }
+
+        // Extract key accurately
+        var key = '';
+        var $addQty = $item.find('.wpcpq-add-qty');
+        if ($addQty.length && $addQty.attr('data-key')) {
+            key = $addQty.attr('data-key');
+        }
+        if (!key) {
+            var roleInputName = $item.find('input.wpcpq_role').attr('name') || '';
+            var nameMatch = roleInputName.match(/\[([^\]]+)\]\[role\]/);
+            if (nameMatch) {
+                key = nameMatch[1];
+            }
+        }
+        if (!key) {
+            var classNames = ($item.attr('class') || '').split(/\s+/);
+            for (var c = 0; c < classNames.length; c++) {
+                if (classNames[c].indexOf('wpcpq-item-') === 0) {
+                    var suffix = classNames[c].substring('wpcpq-item-'.length);
+                    if (suffix && suffix !== 'active' && suffix !== 'default' && suffix !== 'line' && suffix !== 'header' && suffix !== 'content' && suffix !== 'apply') {
+                        key = suffix;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Apply for
+        var $applySelect = $item.find('.wpcpq_apply');
+        var applyVal = $applySelect.val() || 'all';
+        var applyText = $applySelect.find('option:selected').text().trim() || 'All products';
+        var excludeOnsale = $item.find('input[name*="[exclude_onsale]"]').is(':checked');
+
+        var ruleTitle = roleName;
+        if (applyVal !== 'all' && applyText) {
+            ruleTitle += ' - ' + applyText;
+        }
+        if (key) {
+            ruleTitle += ' (#' + key + ')';
+        }
+
+        var applyTerms = [];
+        if (applyVal !== 'all') {
+            $item.find('.wpcpq_terms option:selected').each(function () {
+                var termText = $(this).text().trim();
+                if (termText) {
+                    applyTerms.push(termText);
+                }
+            });
+        }
+
+        // Pricing method & Layout
+        var methodText = $item.find('.wpcpq_method option:selected').text().trim() || 'Volume pricing';
+        var layoutText = $item.find('.wpcpq_layout option:selected').text().trim() || 'Default Table';
+
+        // Tiers
+        var tiers = [];
+        $item.find('.wpcpq-quantity').each(function () {
+            var qty = $(this).find('.wpcpq-quantity-qty').val();
+            var price = $(this).find('.wpcpq-quantity-price').val();
+            var text = $(this).find('.wpcpq-quantity-text').val() || '';
+            if (qty !== '' || price !== '') {
+                tiers.push({
+                    quantity: qty || '0',
+                    price: price || '0',
+                    text: text
+                });
+            }
+        });
+
+        // Build HTML
+        var html = '<div class="wpcpq-sum-section">';
+        html += '<div class="wpcpq-sum-status active"><span class="wpcpq-sum-dot"></span> Active</div>';
+        if (key) {
+            html += '<div class="wpcpq-sum-badge">#' + key + '</div>';
+        }
+        html += '</div>';
+
+        html += '<div class="wpcpq-sum-section">';
+        html += '<div class="wpcpq-sum-label">User Role</div>';
+        html += '<div class="wpcpq-sum-detail"><strong class="wpcpq-sum-type">' + roleName + '</strong></div>';
+        html += '</div>';
+
+        html += '<div class="wpcpq-sum-section">';
+        html += '<div class="wpcpq-sum-label">Apply For</div>';
+        html += '<div class="wpcpq-sum-detail">';
+        html += '<strong class="wpcpq-sum-type">' + applyText + '</strong>';
+        if (applyTerms.length > 0) {
+            html += '<div class="wpcpq-sum-terms">' + applyTerms.join(', ') + '</div>';
+        }
+        if (excludeOnsale) {
+            html += '<div class="wpcpq-sum-subtext"><span class="dashicons dashicons-yes-alt"></span> Exclude on-sale products</div>';
+        }
+        html += '</div></div>';
+
+        html += '<div class="wpcpq-sum-section">';
+        html += '<div class="wpcpq-sum-label">Pricing Configuration</div>';
+        html += '<div class="wpcpq-sum-detail">';
+        html += '<span><strong>Method:</strong> ' + methodText + '</span> &bull; ';
+        html += '<span><strong>Layout:</strong> ' + layoutText + '</span>';
+        html += '</div></div>';
+
+        html += '<div class="wpcpq-sum-section">';
+        html += '<div class="wpcpq-sum-label">Quantity-Based Pricing Tiers</div>';
+        if (tiers.length > 0) {
+            html += '<div class="wpcpq-sum-tiers-wrap"><table class="wpcpq-sum-table">';
+            html += '<thead><tr><th>Min Quantity</th><th>Price / Adjustment</th><th>After Text</th></tr></thead>';
+            html += '<tbody>';
+            for (var t = 0; t < tiers.length; t++) {
+                html += '<tr>';
+                html += '<td><strong>' + tiers[t].quantity + '</strong></td>';
+                html += '<td><span class="wpcpq-sum-price-tag">' + tiers[t].price + '</span></td>';
+                html += '<td>' + (tiers[t].text ? tiers[t].text : '<span class="wpcpq-sum-empty">&mdash;</span>') + '</td>';
+                html += '</tr>';
+            }
+            html += '</tbody></table></div>';
+        } else {
+            html += '<div class="wpcpq-sum-detail"><span class="wpcpq-sum-empty">No pricing tiers configured</span></div>';
+        }
+        html += '</div>';
+
+        var $modal = $('#wpcpq-summary-modal');
+        if ($modal.length === 0) {
+            $('body').append('<div id="wpcpq-summary-modal"><div class="wpcpq-summary-content"></div></div>');
+            $modal = $('#wpcpq-summary-modal');
+        }
+
+        var closeBtnText = (typeof wpcpq_vars !== 'undefined' && wpcpq_vars.close) ? wpcpq_vars.close : 'Close';
+        var dialogButtons = {};
+        dialogButtons[closeBtnText] = function () {
+            $(this).dialog('close');
+        };
+
+        $modal.find('.wpcpq-summary-content').html(html);
+
+        if ($modal.hasClass('ui-dialog-content')) {
+            $modal.dialog('option', 'title', ruleTitle);
+            $modal.closest('.ui-dialog').find('.ui-dialog-title').text(ruleTitle);
+            $modal.dialog('open');
+        } else {
+            $modal.dialog({
+                title: ruleTitle,
+                modal: true,
+                width: 520,
+                dialogClass: 'wpc-dialog wpcpq-dialog wpcpq-summary-dialog',
+                open: function () {
+                    $('.ui-widget-overlay').bind('click', function () {
+                        $modal.dialog('close');
+                    });
+                },
+                buttons: dialogButtons
+            });
+            $modal.closest('.ui-dialog').find('.ui-dialog-title').text(ruleTitle);
+        }
+    });
+
+    $(document).on('click touch', '.wpcpq_expand_all', function (e) {
+        e.preventDefault();
+        $('.wpcpq-item').addClass('active');
+    });
+
+    $(document).on('click touch', '.wpcpq_collapse_all', function (e) {
+        e.preventDefault();
+        $('.wpcpq-item').removeClass('active');
+    });
+
+    $(document).on('click touch', '.wpcpq-item-remove', function () {
         var r = confirm(
             'Do you want to remove this role? This action cannot undo.');
         if (r == true) {

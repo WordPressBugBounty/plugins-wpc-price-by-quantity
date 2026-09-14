@@ -41,11 +41,31 @@ $class          = 'wpcpq-item wpcpq-item-' . $key . ( $active ? ' active' : '' )
 ?>
 <div class="<?php echo esc_attr( $class ); ?>">
     <div class="wpcpq-item-header">
-        <span class="wpcpq-item-move ui-sortable-handle"><?php esc_html_e( 'move', 'wpc-price-by-quantity' ); ?></span>
+        <span class="wpcpq-item-move ui-sortable-handle hint--top" aria-label="<?php esc_attr_e( 'Drag to reorder', 'wpc-price-by-quantity' ); ?>"><span class="dashicons dashicons-menu"></span></span>
         <span class="wpcpq-item-label"><span class="wpcpq-label-role"><?php echo esc_html( $role_name ); ?></span> <span
-                    class="wpcpq-label-apply"><?php echo esc_html( $apply === 'all' ? 'all' : $apply . ': ' . $apply_val ); ?></span></span>
-        <span class="wpcpq-item-duplicate"><?php esc_html_e( 'duplicate', 'wpc-price-by-quantity' ); ?></span>
-        <span class="wpcpq-item-remove"><?php esc_html_e( 'remove', 'wpc-price-by-quantity' ); ?></span>
+                    class="wpcpq-label-apply"><?php echo esc_html( $apply === 'all' ? 'all' : $apply . ': ' . ( is_array( $apply_val ) ? implode( ',', $apply_val ) : $apply_val ) ); ?></span></span>
+        <span class="wpcpq-item-summary wpcpq_summary_btn hint--top"
+              aria-label="<?php esc_attr_e( 'Summary', 'wpc-price-by-quantity' ); ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+        </span>
+        <span class="wpcpq-item-duplicate hint--top" aria-label="<?php esc_attr_e( 'Duplicate', 'wpc-price-by-quantity' ); ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+        </span>
+        <span class="wpcpq-item-remove hint--top" aria-label="<?php esc_attr_e( 'Remove', 'wpc-price-by-quantity' ); ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </span>
     </div>
     <div class="wpcpq-item-content">
         <div class="wpcpq-item-line wpcpq-item-apply">
@@ -150,18 +170,20 @@ $class          = 'wpcpq-item wpcpq-item-' . $key . ( $active ? ' active' : '' )
                                    name="<?php echo esc_attr( 'wpcpq_prices' . $name . '[' . $key . '][tiers][' . $count . '][text]' ); ?>"/>
                         </span>
                         <span class="wpcpq-remove-qty hint--top"
-                              aria-label="<?php esc_attr_e( 'remove', 'wpc-price-by-quantity' ); ?>">&times;</span>
+                              aria-label="<?php esc_attr_e( 'Remove', 'wpc-price-by-quantity' ); ?>">&times;</span>
                     </div>
                     <?php
                     $count ++;
                 }
             } ?>
-            <button class="button wpcpq-add-qty" type="button"
-                    data-id="<?php echo esc_attr( $is_variation ? $product_id : 0 ); ?>"
-                    data-key="<?php echo esc_attr( $key ); ?>"
-                    data-count="<?php echo esc_attr( is_array( $price['tiers'] ) && ! empty( $price['tiers'] ) ? count( $price['tiers'] ) : 0 ); ?>">
-                <?php esc_html_e( '+ New row', 'wpc-price-by-quantity' ); ?>
-            </button>
+            <div class="wpcpq-add-qty-wrap">
+                <button class="button wpcpq-add-qty" type="button"
+                        data-id="<?php echo esc_attr( $is_variation ? $product_id : 0 ); ?>"
+                        data-key="<?php echo esc_attr( $key ); ?>"
+                        data-count="<?php echo esc_attr( is_array( $price['tiers'] ) && ! empty( $price['tiers'] ) ? count( $price['tiers'] ) : 0 ); ?>">
+                    <?php esc_html_e( '+ New row', 'wpc-price-by-quantity' ); ?>
+                </button>
+            </div>
         </div>
     </div>
 </div>

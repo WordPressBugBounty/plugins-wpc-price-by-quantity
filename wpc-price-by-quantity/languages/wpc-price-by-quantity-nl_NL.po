@@ -132,7 +132,7 @@ msgstr "Aantal"
 
 #: includes/class-backend.php:359 includes/templates/role-price.php:18
 #: includes/templates/role-price.php:41
-msgid "remove"
+msgid "Remove"
 msgstr "verwijder"
 
 #: includes/class-backend.php:154
