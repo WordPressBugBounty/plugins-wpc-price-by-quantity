@@ -8,17 +8,17 @@ Author URI: https://wpclever.net
 Text Domain: wpc-price-by-quantity
 Domain Path: /languages/
 Requires Plugins: woocommerce
-Version: 5.5.0
+Version: 5.5.1
 Requires at least: 5.9
 WC requires at least: 3.0
-WC tested up to: 11.1
+WC tested up to: 11.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.5.0' );
+! defined( 'WPCPQ_VERSION' ) && define( 'WPCPQ_VERSION', '5.5.1' );
 ! defined( 'WPCPQ_LITE' ) && define( 'WPCPQ_LITE', __FILE__ );
 ! defined( 'WPCPQ_FILE' ) && define( 'WPCPQ_FILE', __FILE__ );
 ! defined( 'WPCPQ_URI' ) && define( 'WPCPQ_URI', plugin_dir_url( __FILE__ ) );

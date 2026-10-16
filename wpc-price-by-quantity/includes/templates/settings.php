@@ -318,7 +318,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                             <strong><?php esc_html_e( 'Quantity', 'wpc-price-by-quantity' ); ?></strong>
                         </div>
                         <div class="wpcpq-settings-field">
-                            <input type="text" name="wpcpq_localization[quantity]" class="regular-text"
+                            <input type="text" name="wpcpq_localization[quantity]" class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'quantity' ) ); ?>"
                                    placeholder="<?php esc_attr_e( 'Quantity', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -329,7 +329,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                             <strong><?php esc_html_e( 'Price', 'wpc-price-by-quantity' ); ?></strong>
                         </div>
                         <div class="wpcpq-settings-field">
-                            <input type="text" name="wpcpq_localization[price]" class="regular-text"
+                            <input type="text" name="wpcpq_localization[price]" class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'price' ) ); ?>"
                                    placeholder="<?php esc_attr_e( 'Price', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -340,7 +340,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                             <strong><?php esc_html_e( 'Tier Total', 'wpc-price-by-quantity' ); ?></strong>
                         </div>
                         <div class="wpcpq-settings-field">
-                            <input type="text" name="wpcpq_localization[row_total]" class="regular-text"
+                            <input type="text" name="wpcpq_localization[row_total]" class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'row_total' ) ); ?>"
                                    placeholder="<?php esc_attr_e( 'Tier Total', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -351,7 +351,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                             <strong><?php esc_html_e( 'Min outliers', 'wpc-price-by-quantity' ); ?></strong>
                         </div>
                         <div class="wpcpq-settings-field">
-                            <input type="text" name="wpcpq_localization[min]" class="regular-text"
+                            <input type="text" name="wpcpq_localization[min]" class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'min' ) ); ?>"
                                    placeholder="<?php esc_attr_e( '<{min}', 'wpc-price-by-quantity' ); ?>"/>
                             <span class="description"><?php esc_html_e( 'Values smaller than min.', 'wpc-price-by-quantity' ); ?></span>
@@ -363,7 +363,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                             <strong><?php esc_html_e( 'Single value', 'wpc-price-by-quantity' ); ?></strong>
                         </div>
                         <div class="wpcpq-settings-field">
-                            <input type="text" name="wpcpq_localization[single]" class="regular-text"
+                            <input type="text" name="wpcpq_localization[single]" class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'single' ) ); ?>"
                                    placeholder="<?php esc_attr_e( '{single}', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -374,7 +374,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                             <strong><?php esc_html_e( 'Values between min and max', 'wpc-price-by-quantity' ); ?></strong>
                         </div>
                         <div class="wpcpq-settings-field">
-                            <input type="text" name="wpcpq_localization[from_to]" class="regular-text"
+                            <input type="text" name="wpcpq_localization[from_to]" class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'from_to' ) ); ?>"
                                    placeholder="<?php esc_attr_e( '{from} - {to}', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -385,7 +385,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                             <strong><?php esc_html_e( 'Max & outliers', 'wpc-price-by-quantity' ); ?></strong>
                         </div>
                         <div class="wpcpq-settings-field">
-                            <input type="text" name="wpcpq_localization[max]" class="regular-text"
+                            <input type="text" name="wpcpq_localization[max]" class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'max' ) ); ?>"
                                    placeholder="<?php esc_attr_e( '{max}+', 'wpc-price-by-quantity' ); ?>"/>
                             <span class="description"><?php esc_html_e( 'Max quantity and larger values.', 'wpc-price-by-quantity' ); ?></span>
@@ -407,7 +407,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                         </div>
                         <div class="wpcpq-settings-field">
                             <input type="text" name="wpcpq_localization[qb_item_qty_singular]"
-                                   class="regular-text"
+                                   class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_qty_singular' ) ); ?>"
                                    placeholder="<?php /* translators: qty */ esc_attr_e( '%s item', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -419,7 +419,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                         </div>
                         <div class="wpcpq-settings-field">
                             <input type="text" name="wpcpq_localization[qb_item_qty_plural]"
-                                   class="regular-text"
+                                   class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_qty_plural' ) ); ?>"
                                    placeholder="<?php /* translators: qty */ esc_attr_e( '%s items', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -431,7 +431,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                         </div>
                         <div class="wpcpq-settings-field">
                             <input type="text" name="wpcpq_localization[qb_item_price]"
-                                   class="regular-text"
+                                   class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_price' ) ); ?>"
                                    placeholder="<?php /* translators: price */ esc_attr_e( '%s for each product', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
@@ -443,7 +443,7 @@ $active_tab = sanitize_key( wp_unslash( $_GET['tab'] ?? 'settings' ) );
                         </div>
                         <div class="wpcpq-settings-field">
                             <input type="text" name="wpcpq_localization[qb_item_atc]"
-                                   class="regular-text"
+                                   class="large-text"
                                    value="<?php echo esc_attr( Wpcpq_Helper()::localization( 'qb_item_atc' ) ); ?>"
                                    placeholder="<?php esc_attr_e( 'Add to cart', 'wpc-price-by-quantity' ); ?>"/>
                         </div>
